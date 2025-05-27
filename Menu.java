@@ -1,4 +1,16 @@
 /*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - -      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
  * MSJ Development Inc. (2025)
  * ISP
  * Client: Ms. Krasteva (ICS4U1, S2)
@@ -25,10 +37,19 @@ public class Menu extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
+        // Load and set custom font for buttons
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Main.AthensClassic);
+            UIManager.put("Button.font", Main.AthensClassic);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // Use absolute positioning
         getContentPane().setLayout(null); // Use absolute positioning
 
-        ImageIcon icon = new ImageIcon("assets/folderIcon.png");
+        ImageIcon icon = new ImageIcon("assets/folder/folderClosed.png");
 
         JButton button0 = createCustomButton("Instructions", icon, 100, 100);
         JButton button1 = createCustomButton("Storyline", icon, 300, 100);
@@ -57,8 +78,7 @@ public class Menu extends JFrame {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                ImageIcon scaledIcon = new ImageIcon(icon.getImage().getScaledInstance(
-                    (int)(icon.getIconWidth() * 1.2), (int)(icon.getIconHeight() * 1.2), Image.SCALE_SMOOTH));
+                ImageIcon scaledIcon = new ImageIcon("assets/folder/folderOpen.png");
                 button.setIcon(scaledIcon);
             }
 
@@ -67,8 +87,20 @@ public class Menu extends JFrame {
                 button.setIcon(icon);
             }
         });
-
-        button.addActionListener(e -> JOptionPane.showMessageDialog(Menu.this, name + " clicked"));
+        
+        if (name.equals("Instructions")) {
+            button.addActionListener(e -> {
+                setContentPane(new Instructions(this));
+                revalidate();
+            });
+        } else if (name.equals("Credits")) {
+            button.addActionListener(e -> {
+                setContentPane(new Credits(this));
+                revalidate();
+            });
+        } else {
+            button.addActionListener(e -> JOptionPane.showMessageDialog(Menu.this, name + " clicked"));
+        }
 
         return button;
     }
