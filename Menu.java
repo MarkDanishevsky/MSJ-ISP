@@ -23,19 +23,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Menu extends JFrame {
+public class Menu extends JPanel {
 
     public Menu() {
         ImageIcon originalIcon = new ImageIcon("assets/background.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(1024, 768, Image.SCALE_SMOOTH);
-        setContentPane(new JLabel(new ImageIcon(scaledImage)));
-        getContentPane().setLayout(new BorderLayout());
-
-        setTitle("Image Menu");
-        setSize(1024, 794);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(false);
+        setLayout(null); // Use absolute positioning
 
         // Load and set custom font for buttons
         try {
@@ -46,27 +39,26 @@ public class Menu extends JFrame {
             e.printStackTrace();
         }
 
-        // Use absolute positioning
-        getContentPane().setLayout(null); // Use absolute positioning
-
         ImageIcon icon = new ImageIcon("assets/folder/folderClosed.png");
 
-        JButton button0 = createCustomButton("Instructions", icon, 100, 100);
-        JButton button1 = createCustomButton("Storyline", icon, 300, 100);
-        JButton button2 = createCustomButton("Game", icon, 500, 100);
-        JButton button3 = createCustomButton("Minigame", icon, 100, 300);
-        JButton button4 = createCustomButton("Credits", icon, 300, 300);
+        JButton button0 = createCustomButton("Instructions", icon, 100, 100, Main.frame);
+        JButton button1 = createCustomButton("Storyline", icon, 300, 100, Main.frame);
+        JButton button2 = createCustomButton("Game", icon, 500, 100, Main.frame);
+        JButton button3 = createCustomButton("Minigame", icon, 100, 300, Main.frame);
+        JButton button4 = createCustomButton("Credits", icon, 300, 300, Main.frame);
 
-        getContentPane().add(button0);
-        getContentPane().add(button1);
-        getContentPane().add(button2);
-        getContentPane().add(button3);
-        getContentPane().add(button4);
+        add(button0);
+        add(button1);
+        add(button2);
+        add(button3);
+        add(button4);
 
-        setVisible(true);
+        JLabel backgroundLabel = new JLabel(new ImageIcon(scaledImage));
+        backgroundLabel.setBounds(0, 0, 1024, 768);
+        add(backgroundLabel);
     }
 
-    private JButton createCustomButton(String name, ImageIcon icon, int x, int y) {
+    private JButton createCustomButton(String name, ImageIcon icon, int x, int y, JFrame parentFrame) {
         JButton button = new JButton(name, icon);
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setVerticalTextPosition(SwingConstants.BOTTOM);
@@ -90,22 +82,26 @@ public class Menu extends JFrame {
         
         if (name.equals("Instructions")) {
             button.addActionListener(e -> {
-                setContentPane(new Instructions(this));
-                revalidate();
+                parentFrame.setContentPane(new Instructions(parentFrame));
+                parentFrame.revalidate();
             });
         } else if (name.equals("Credits")) {
             button.addActionListener(e -> {
-                setContentPane(new Credits(this));
-                revalidate();
+                parentFrame.setContentPane(new Credits(parentFrame));
+                parentFrame.revalidate();
+            });
+        } else if (name.equals("Game")) {
+            button.addActionListener(e -> {
+                SwingUtilities.invokeLater(() -> {
+                    HeadlineChooser headlineChooser = new HeadlineChooser();
+                    parentFrame.setContentPane(headlineChooser);
+                    parentFrame.setVisible(true);
+                });
             });
         } else {
             button.addActionListener(e -> JOptionPane.showMessageDialog(Menu.this, name + " clicked"));
         }
 
         return button;
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(Menu::new);
     }
 }

@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 public class Instructions extends JPanel {
 
     public Instructions(JFrame parentFrame) {
+        
         setLayout(new BorderLayout());
 
         JLabel instructionsLabel = new JLabel(

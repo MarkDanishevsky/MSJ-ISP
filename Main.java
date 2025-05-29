@@ -6,7 +6,7 @@
  *  |    |       |      |
  *  | S  |       |      |
  *  |    |      J|      |
- *  + - -| - - - -      |
+ *  + - -| - - - +      |
  *   \   |         \    |
  *     \ |           \  |
  *       +--------------+
@@ -28,8 +28,28 @@ import java.io.IOException;
 
 public class Main {
     static Font AthensClassic;
+    static JFrame frame;
     public static void main(String[] args) throws FontFormatException, IOException {
         AthensClassic = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(24f);
-        new Menu();
+        
+        frame = new JFrame("1984 AI - MSJ");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(1024, 768);
+        frame.setLocationRelativeTo(null);
+        frame.setResizable(false);
+
+        SplashScreen splash = new SplashScreen();
+        frame.setContentPane(splash);
+        frame.setVisible(true);
+        splash.displayImages("assets/MSJ_Logo.png", "assets/MSJ_Logo.png");
+
+        // switch to the Menu after 3 s
+        javax.swing.Timer timer = new javax.swing.Timer(3000, evt -> {
+        Menu menu = new Menu();
+        frame.setContentPane(menu);
+        frame.revalidate();
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 }
