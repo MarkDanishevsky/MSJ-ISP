@@ -3,37 +3,36 @@ import java.awt.*;
 import java.io.IOException;
 
 public class SplashScreen extends JPanel {
-    private final FadeImagePanel leftPanel;
-    private final FadeImagePanel rightPanel;
+    private final FadeImagePanel imgPanel;
     private final ImageAnimatorPanel animationPanel;
 
     public SplashScreen() {
+        setLayout(new BorderLayout());
 
-        leftPanel = new FadeImagePanel();
-        rightPanel = new FadeImagePanel();
-        animationPanel = new ImageAnimatorPanel(
-            new String[]{"assets/bird/pixil-frame-0.png", "assets/bird/pixil-frame-2.png", "assets/bird/pixil-frame-3.png"},
-            300 // ms per frame
-        );
+        imgPanel = new FadeImagePanel();
 
-        JPanel mainContainer = new JPanel(new BorderLayout());
+        String[] birdFrames = new String[10]; 
+        for (int i = 0; i < 10; i++) {
+            birdFrames[i] = "assets/bird/pixil-frame-" + i + ".png";
+        }
 
-        JPanel imagesContainer = new JPanel(new GridLayout(1, 2));
-        imagesContainer.add(leftPanel);
-        imagesContainer.add(rightPanel);
+        animationPanel = new ImageAnimatorPanel(birdFrames, 50); 
 
-        mainContainer.add(imagesContainer, BorderLayout.CENTER);
-        mainContainer.add(animationPanel, BorderLayout.SOUTH);
+        JPanel imagesContainer = new JPanel(new GridLayout(1, 1));
+        imagesContainer.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0)); // top padding
+        imagesContainer.add(imgPanel);
 
-        Main.frame.setContentPane(mainContainer);
+        JPanel animationWrapper = new JPanel(new BorderLayout());
+        animationWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 150, 0)); // top margin + bottom spacing
+        animationWrapper.add(animationPanel, BorderLayout.CENTER);
+
+        add(imagesContainer, BorderLayout.CENTER);
+        add(animationWrapper, BorderLayout.SOUTH);
     }
 
     public void displayImages(String path1, String path2) throws IOException {
-        leftPanel.setImage(path1);
-        rightPanel.setImage(path2);
-        setVisible(true);
-        leftPanel.startFade();
-        rightPanel.startFade();
-        animationPanel.startAnimation(); // Start animation in parallel
+        imgPanel.setImage(path1);
+        imgPanel.startFade();
+        animationPanel.startAnimation(); 
     }
 }

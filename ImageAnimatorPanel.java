@@ -12,16 +12,25 @@ class ImageAnimatorPanel extends JPanel implements Runnable {
     private int currentFrame = 0;
     private boolean running = false;
 
+    private static final int TARGET_WIDTH = 75;
+    private static final int TARGET_HEIGHT = 75;
+
     public ImageAnimatorPanel(String[] framePaths, int frameDelay) {
         this.framePaths = framePaths;
         this.frameDelay = frameDelay;
-        this.frames = new BufferedImage[3];
-        setPreferredSize(new Dimension(1024, 200)); // Height for animation area
+        this.frames = new BufferedImage[framePaths.length];
+        setPreferredSize(new Dimension(1024, 200));
 
-        // Preload frames
         for (int i = 0; i < framePaths.length; i++) {
             try {
-                frames[i] = ImageIO.read(new File(framePaths[i]));
+                BufferedImage original = ImageIO.read(new File(framePaths[i]));
+                Image scaled = original.getScaledInstance(TARGET_WIDTH, TARGET_HEIGHT, Image.SCALE_SMOOTH);
+                BufferedImage bufferedScaled = new BufferedImage(TARGET_WIDTH, TARGET_HEIGHT,
+                        BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2 = bufferedScaled.createGraphics();
+                g2.drawImage(scaled, 0, 0, null);
+                g2.dispose();
+                frames[i] = bufferedScaled;
             } catch (IOException e) {
                 System.err.println("Failed to load frame: " + framePaths[i]);
             }

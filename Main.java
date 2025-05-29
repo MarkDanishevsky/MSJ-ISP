@@ -40,7 +40,8 @@ public class Main {
 
         SplashScreen splash = new SplashScreen();
         frame.setContentPane(splash);
-        frame.setVisible(true);
+        frame.setVisible(true); // Show the fully built SplashScreen
+
         splash.displayImages("assets/MSJ_Logo.png", "assets/MSJ_Logo.png");
 
         // switch to the Menu after 3 s
