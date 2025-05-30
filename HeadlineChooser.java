@@ -1,3 +1,26 @@
+/*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - +      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
+ * MSJ Development Inc. (2025)
+ * ISP
+ * Client: Ms. Krasteva (ICS4U1, S2)
+ * Date: Friday May 30rd, 2025
+ * 
+ * This a prototype of our gameplay.
+ * 
+ * Cube made using: https://1j01.github.io/ascii-hypercube/
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
