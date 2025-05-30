@@ -30,7 +30,8 @@ public class Instructions extends JPanel {
         setLayout(new BorderLayout());
 
         JLabel instructionsLabel = new JLabel(
-            "Put instructions here Joe in HTML format",
+            "<html><div style='text-align: center;'>"
+            + "For each event, select one headline for the article. Once you have gone through each of the events, choose one article to be the headline article.",
             SwingConstants.CENTER
         );
         instructionsLabel.setFont(Main.AthensClassic);

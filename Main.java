@@ -34,7 +34,7 @@ public class Main {
         
         frame = new JFrame("1984 AI - MSJ");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1024, 768);
+        frame.setSize(1024, 768 + 28);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 

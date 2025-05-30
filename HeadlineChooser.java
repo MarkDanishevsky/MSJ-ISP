@@ -84,7 +84,7 @@ public class HeadlineChooser extends JPanel {
         
 
         JButton rightArrow = new JButton(">");
-        rightArrow.setBounds(300, 220, 50, 30);
+        rightArrow.setBounds(327, 220, 50, 30);
         rightArrow.setFont(Main.AthensClassic);
         rightArrow.addActionListener(e -> {
             if (currentIndex < facts.length - 1) {
