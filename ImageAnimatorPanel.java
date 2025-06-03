@@ -13,7 +13,7 @@ class ImageAnimatorPanel extends JPanel implements Runnable {
     private boolean running = false;
 
     private static final int TARGET_WIDTH = 75;
-    private static final int TARGET_HEIGHT = 75;
+    private static final int TARGET_HEIGHT = 135;
 
     public ImageAnimatorPanel(String[] framePaths, int frameDelay) {
         this.framePaths = framePaths;
