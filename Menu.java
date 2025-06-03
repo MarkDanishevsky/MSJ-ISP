@@ -14,7 +14,7 @@
  * MSJ Development Inc. (2025)
  * ISP
  * Client: Ms. Krasteva (ICS4U1, S2)
- * Date: Friday May 23rd, 2025
+ * Date: Friday May 30th, 2025
  * 
  * This is the menu for our game.
  */
@@ -26,7 +26,7 @@ import java.awt.event.*;
 public class Menu extends JPanel {
 
     public Menu() {
-        ImageIcon originalIcon = new ImageIcon("assets/background.png");
+        ImageIcon originalIcon = new ImageIcon("assets/background_with_window.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(1024, 768, Image.SCALE_SMOOTH);
         setLayout(null); // Use absolute positioning
 
@@ -41,11 +41,11 @@ public class Menu extends JPanel {
 
         ImageIcon icon = new ImageIcon("assets/folder/folderClosed.png");
 
-        JButton button0 = createCustomButton("Instructions", icon, 100, 100, Main.frame);
-        JButton button1 = createCustomButton("Storyline", icon, 300, 100, Main.frame);
-        JButton button2 = createCustomButton("Game", icon, 500, 100, Main.frame);
-        JButton button3 = createCustomButton("Minigame", icon, 100, 300, Main.frame);
-        JButton button4 = createCustomButton("Credits", icon, 300, 300, Main.frame);
+        JButton button0 = createCustomButton("Instructions", icon, 100, 230, Main.frame);
+        JButton button1 = createCustomButton("Storyline", icon, 300, 230, Main.frame);
+        JButton button2 = createCustomButton("Game", icon, 500, 230, Main.frame);
+        JButton button3 = createCustomButton("Minigame", icon, 100, 430, Main.frame);
+        JButton button4 = createCustomButton("Credits", icon, 300, 430, Main.frame);
 
         add(button0);
         add(button1);

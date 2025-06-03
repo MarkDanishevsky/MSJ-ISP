@@ -1,3 +1,26 @@
+/*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - +      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
+ * MSJ Development Inc. (2025)
+ * ISP
+ * Client: Ms. Krasteva (ICS4U1, S2)
+ * Date: Friday May 30rd, 2025
+ * 
+ * This a prototype of our gameplay.
+ * 
+ * Cube made using: https://1j01.github.io/ascii-hypercube/
+ */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -84,7 +107,7 @@ public class HeadlineChooser extends JPanel {
         
 
         JButton rightArrow = new JButton(">");
-        rightArrow.setBounds(300, 220, 50, 30);
+        rightArrow.setBounds(327, 220, 50, 30);
         rightArrow.setFont(Main.AthensClassic);
         rightArrow.addActionListener(e -> {
             if (currentIndex < facts.length - 1) {

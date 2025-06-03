@@ -14,7 +14,7 @@
  * MSJ Development Inc. (2025)
  * ISP
  * Client: Ms. Krasteva (ICS4U1, S2)
- * Date: Friday May 23rd, 2025
+ * Date: Friday May 30th, 2025
  * 
  * This is the driver class for our program
  * 
@@ -34,7 +34,7 @@ public class Main {
         
         frame = new JFrame("1984 AI - MSJ");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1024, 768);
+        frame.setSize(1024, 768 + 28);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 

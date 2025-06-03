@@ -14,7 +14,7 @@
  * MSJ Development Inc. (2025)
  * ISP
  * Client: Ms. Krasteva (ICS4U1, S2)
- * Date: Friday May 23rd, 2025
+ * Date: Friday May 30th, 2025
  * 
  * This is the menu instuctions page for our game.
  */
@@ -30,7 +30,8 @@ public class Instructions extends JPanel {
         setLayout(new BorderLayout());
 
         JLabel instructionsLabel = new JLabel(
-            "Put instructions here Joe in HTML format",
+            "<html><div style='text-align: center;'>"
+            + "For each event, select one headline for the article. Once you have gone through each of the events, choose one article to be the headline article.",
             SwingConstants.CENTER
         );
         instructionsLabel.setFont(Main.AthensClassic);
