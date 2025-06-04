@@ -16,7 +16,7 @@ public class SplashScreen extends JPanel {
             birdFrames[i] = "assets/bird/pixil-frame-" + i + ".png";
         }
 
-        animationPanel = new ImageAnimatorPanel(birdFrames, 50); 
+        animationPanel = new ImageAnimatorPanel(birdFrames, 100); 
 
         JPanel imagesContainer = new JPanel(new GridLayout(1, 1));
         imagesContainer.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0)); // top padding
