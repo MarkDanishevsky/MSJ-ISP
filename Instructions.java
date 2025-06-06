@@ -19,9 +19,9 @@
  * This is the menu instuctions page for our game.
  */
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import javax.swing.*;
 
 public class Instructions extends JPanel {
 

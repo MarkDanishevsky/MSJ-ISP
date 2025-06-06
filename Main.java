@@ -21,10 +21,9 @@
  * Cube made using: https://1j01.github.io/ascii-hypercube/
  */
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.io.IOException;
+import javax.swing.*;
 
 public class Main {
     static Font AthensClassic;
@@ -46,9 +45,9 @@ public class Main {
 
         // switch to the Menu after 3 s
         javax.swing.Timer timer = new javax.swing.Timer(3000, evt -> {
-        Menu menu = new Menu();
-        frame.setContentPane(menu);
-        frame.revalidate();
+            Menu menu = new Menu();
+            frame.setContentPane(menu);
+            frame.revalidate();
         });
         timer.setRepeats(false);
         timer.start();

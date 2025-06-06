@@ -19,14 +19,14 @@
  * This is the menu for our game.
  */
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 
 public class Menu extends JPanel {
 
     public Menu() {
-        ImageIcon originalIcon = new ImageIcon("assets/background_with_window.png");
+        ImageIcon originalIcon = new ImageIcon("assets/background.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(1024, 768, Image.SCALE_SMOOTH);
         setLayout(null); // Use absolute positioning
 
@@ -82,12 +82,14 @@ public class Menu extends JPanel {
         
         if (name.equals("Instructions")) {
             button.addActionListener(e -> {
-                parentFrame.setContentPane(new Instructions(parentFrame));
+                Instructions instructions = new Instructions(parentFrame);
+                parentFrame.setContentPane(instructions);
                 parentFrame.revalidate();
             });
         } else if (name.equals("Credits")) {
             button.addActionListener(e -> {
-                parentFrame.setContentPane(new Credits(parentFrame));
+                Credits credits = new Credits(parentFrame);
+                parentFrame.setContentPane(credits);
                 parentFrame.revalidate();
             });
         } else if (name.equals("Game")) {
@@ -97,6 +99,12 @@ public class Menu extends JPanel {
                     parentFrame.setContentPane(headlineChooser);
                     parentFrame.setVisible(true);
                 });
+            });
+        } else if (name.equals("Minigame")) {
+            button.addActionListener(e -> {
+                Minigame minigame = new Minigame(parentFrame);
+                parentFrame.setContentPane(minigame);
+                parentFrame.revalidate();
             });
         } else {
             button.addActionListener(e -> JOptionPane.showMessageDialog(Menu.this, name + " clicked"));
