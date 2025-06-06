@@ -25,9 +25,46 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HeadlineChooser extends JPanel {
     private int selectedPreviewIndex = -1;
+    
+    Event[] events = {
+        new Event(
+            "The local lake reached record high levels.",
+            new ArrayList<>(Arrays.asList(
+                new Headline("Lake floods nearby park", 1),
+                new Headline("Record-breaking rainfall hits region", 2),
+                new Headline("Nothing unusual in lake levels, say officials", 3)
+            ))
+        ),
+        new Event(
+            "A new school policy was introduced.",
+            new ArrayList<>(Arrays.asList(
+                new Headline("Students protest new school rules", 1),
+                new Headline("School board implements changes", 2),
+                new Headline("Strict new policy raises eyebrows", 3)
+            ))
+        ),
+        new Event(
+            "Recycling rates increased by 15%.",
+            new ArrayList<>(Arrays.asList(
+                new Headline("City applauds recycling success", 1),
+                new Headline("More residents sorting waste correctly", 2),
+                new Headline("Critics say increase is 'exaggerated'", 3)
+            ))
+        ),
+        new Event(
+            "The mayor announced a new housing plan.",
+            new ArrayList<>(Arrays.asList(
+                new Headline("Mayor promises affordable housing", 1),
+                new Headline("Bold new plan to tackle homelessness", 2),
+                new Headline("Some call housing plan unrealistic", 3)
+            ))
+        )
+    };
+
     private final String[] facts = {
         "The local lake reached record high levels.",
         "A new school policy was introduced.",
