@@ -44,7 +44,7 @@ public class Main {
         splash.displayImages("assets/MSJ_Logo.png", "assets/MSJ_Logo.png");
 
         // switch to the Menu after 3 s
-        javax.swing.Timer timer = new javax.swing.Timer(3000, evt -> {
+        javax.swing.Timer timer = new javax.swing.Timer(1, evt -> {
             Menu menu = new Menu();
             frame.setContentPane(menu);
             frame.revalidate();

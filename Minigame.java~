@@ -17,8 +17,8 @@ public class Minigame extends JPanel {
     private Image backgroundImage;
 
     private String factText = "";
-    private String[] headlines = new String[3]; // bias, fair, propaganda
-    private int[] correctAnswers = { 0, 1, 2 }; // bias, fair, propagand
+    private String[] headlines = new String[3]; // bias, fair, fake
+    private int[] correctAnswers = { 0, 1, 2 }; // bias, fair, fake
 
     /**
      * Loads the first fact and headlines from file
@@ -38,7 +38,7 @@ public class Minigame extends JPanel {
                 factText = lines.get(0);
                 headlines[0] = lines.get(1); // bias
                 headlines[1] = lines.get(2); // fair
-                headlines[2] = lines.get(3); // propaganda
+                headlines[2] = lines.get(3); // fake
             } else {
                 factText = "No fact found.";
                 Arrays.fill(headlines, "Missing headline");
@@ -59,29 +59,29 @@ public class Minigame extends JPanel {
         // Adjust correctAnswers to match new display order
         int[] original = correctAnswers.clone(); // [0, 1, 2]
         correctAnswers[0] = original[1]; // fair
-        correctAnswers[1] = original[2]; // propaganda
+        correctAnswers[1] = original[2]; // fake
         correctAnswers[2] = original[0]; // bias
-
 
         setOpaque(false);
         setLayout(new BorderLayout());
 
         // ── UI Layout Constants ──
-        int titleBottomPadding = 0;
+        int titleBottomPadding = 25;
         int gridPadding = 100;
         int gridHGap = 50;
         int gridVGap = 0;
-        int extraTopPad = 50;
-        int extraBottomPad = 0;
-        int buttonTopPadding = 0;
+        int extraTopPad = 0;
+        int extraBottomPad = -20;
+        int buttonTopPadding = 25;
 
         // --- Title ---
         JLabel titleLabel = new JLabel(
                 "<html><div style='text-align: center;'>For your given fact, identify the correct category for each headline.<br>Your fact is: <b>"
                         + factText + "</b></div></html>");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD, 20f));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(200, 0, titleBottomPadding, 0));
+        // Set font to Quantico, bold, 23 (20 + 3)
+        titleLabel.setFont(new Font("Quantico", Font.BOLD, 23));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(187, 0, titleBottomPadding, 0));
         add(titleLabel, BorderLayout.NORTH);
 
         // --- Grid ---
@@ -89,12 +89,22 @@ public class Minigame extends JPanel {
         gridPanel.setOpaque(false);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(extraTopPad, gridPadding, extraBottomPad, gridPadding));
 
-        // Headline labels
-        // Rearranged headline labels: fair (1) left, propaganda (2) middle, bias (0) right
-        gridPanel.add(new JLabel("<html><div style='text-align: center;'>" + headlines[1] + "</div></html>", SwingConstants.CENTER));
-        gridPanel.add(new JLabel("<html><div style='text-align: center;'>" + headlines[2] + "</div></html>", SwingConstants.CENTER));
-        gridPanel.add(new JLabel("<html><div style='text-align: center;'>" + headlines[0] + "</div></html>", SwingConstants.CENTER));
+        JLabel headlineLabel0 = new JLabel("<html><div style='text-align: center;'>" + headlines[1] + "</div></html>",
+                SwingConstants.CENTER);
+        JLabel headlineLabel1 = new JLabel("<html><div style='text-align: center;'>" + headlines[2] + "</div></html>",
+                SwingConstants.CENTER);
+        JLabel headlineLabel2 = new JLabel("<html><div style='text-align: center;'>" + headlines[0] + "</div></html>",
+                SwingConstants.CENTER);
 
+        // Set font for headline labels to Quantico, plain, 16+3=19
+        Font headlineFont = new Font("Quantico", Font.PLAIN, 19);
+        headlineLabel0.setFont(headlineFont);
+        headlineLabel1.setFont(headlineFont);
+        headlineLabel2.setFont(headlineFont);
+
+        gridPanel.add(headlineLabel0);
+        gridPanel.add(headlineLabel1);
+        gridPanel.add(headlineLabel2);
 
         JSlider slider1 = createThreeChoiceSlider();
         JSlider slider2 = createThreeChoiceSlider();
@@ -112,6 +122,12 @@ public class Minigame extends JPanel {
         slider2ResultLabel = new JLabel(" ", SwingConstants.CENTER);
         slider3ResultLabel = new JLabel(" ", SwingConstants.CENTER);
 
+        // Set font for result labels, Quantico plain 14+3=17
+        Font resultFont = new Font("Quantico", Font.PLAIN, 17);
+        slider1ResultLabel.setFont(resultFont);
+        slider2ResultLabel.setFont(resultFont);
+        slider3ResultLabel.setFont(resultFont);
+
         gridPanel.add(slider1ResultLabel);
         gridPanel.add(slider2ResultLabel);
         gridPanel.add(slider3ResultLabel);
@@ -122,14 +138,20 @@ public class Minigame extends JPanel {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(buttonTopPadding, 0, 150, 0));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(buttonTopPadding, 0, 100, 0));
 
+        Color baseColor = Color.decode("#464646");
+        Color hoverColor = Color.decode("#990030");
+        Border padding = BorderFactory.createEmptyBorder(10, 20, 10, 20);
+
+// --- Submit Button ---
         JButton submitButton = new JButton("Submit");
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submitButton.setFont(new Font("Quantico", Font.BOLD, 17));
         submitButton.addActionListener(e -> {
             int[] userChoices = { slider1Value, slider2Value, slider3Value };
             JLabel[] resultLabels = { slider1ResultLabel, slider2ResultLabel, slider3ResultLabel };
-            String[] categories = { "bias", "fair", "propaganda" };
+            String[] categories = { "bias", "fair", "fake" };
 
             for (int i = 0; i < 3; i++) {
                 if (userChoices[i] == correctAnswers[i]) {
@@ -142,52 +164,78 @@ public class Minigame extends JPanel {
             }
         });
         submitButton.setOpaque(true);
-        submitButton.setBackground(Color.BLACK);
+        submitButton.setBackground(baseColor);
         submitButton.setForeground(Color.WHITE);
         submitButton.setFocusPainted(false);
-        Border redLine = BorderFactory.createLineBorder(Color.RED, 3);
-        Border padding = BorderFactory.createEmptyBorder(10, 20, 10, 20);
-        submitButton.setBorder(BorderFactory.createCompoundBorder(redLine, padding));
+        submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+        submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 3), padding));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+            }
+        });
         buttonPanel.add(submitButton);
         buttonPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
+// --- Close Button ---
         JButton closeButton = new JButton("Close");
         closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        closeButton.setFont(new Font("Quantico", Font.BOLD, 17));
         closeButton.addActionListener(e -> {
             parentFrame.setContentPane(new Menu());
             parentFrame.revalidate();
         });
         closeButton.setOpaque(true);
-        closeButton.setBackground(Color.DARK_GRAY);
+        closeButton.setBackground(baseColor);
         closeButton.setForeground(Color.WHITE);
         closeButton.setFocusPainted(false);
-        closeButton
-                .setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2), padding));
+        closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+        closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 3), padding));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+            }
+        });
         buttonPanel.add(closeButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
-
         parentFrame.setContentPane(this);
         parentFrame.revalidate();
-    }
 
-    private JSlider createThreeChoiceSlider() {
+
+        private JSlider createThreeChoiceSlider() {
         JSlider slider = new JSlider(0, 2, 1);
         slider.setSnapToTicks(true);
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);
 
         Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-        labelTable.put(0, new JLabel("Bias"));
-        labelTable.put(1, new JLabel("Fair"));
-        labelTable.put(2, new JLabel("<html><div style='margin-right:15px;'>lol</div></html>"));
+        // Set font for slider labels to Quantico plain 13+3=16
+        Font sliderLabelFont = new Font("Quantico", Font.PLAIN, 16);
+
+        JLabel biasLabel = new JLabel("Bias");
+        biasLabel.setFont(sliderLabelFont);
+        JLabel fairLabel = new JLabel("Fair");
+        fairLabel.setFont(sliderLabelFont);
+        JLabel FakeLabel = new JLabel("Fake");
+        FakeLabel.setFont(sliderLabelFont);
+
+        labelTable.put(0, biasLabel);
+        labelTable.put(1, fairLabel);
+        labelTable.put(2, FakeLabel);
+
         slider.setLabelTable(labelTable);
         slider.setPaintLabels(true);
-
-        // Custom thickness
-        slider.putClientProperty("Slider.trackWidth", 50); // Increase track height
-        slider.putClientProperty("Slider.thumbHeight", 50); // Optional
-        slider.putClientProperty("Slider.thumbWidth", 50);  // Optional
 
         slider.setOpaque(false);
         return slider;
