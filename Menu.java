@@ -46,12 +46,14 @@ public class Menu extends JPanel {
         JButton button2 = createCustomButton("Game", icon, 500, 230, Main.frame);
         JButton button3 = createCustomButton("Minigame", icon, 100, 430, Main.frame);
         JButton button4 = createCustomButton("Credits", icon, 300, 430, Main.frame);
+        JButton button5 = createCustomButton("Leaderboard", icon, 500, 430, Main.frame);
 
         add(button0);
         add(button1);
         add(button2);
         add(button3);
         add(button4);
+        add(button5);
 
         JLabel backgroundLabel = new JLabel(new ImageIcon(scaledImage));
         backgroundLabel.setBounds(0, 0, 1024, 768);
@@ -106,7 +108,13 @@ public class Menu extends JPanel {
                 parentFrame.setContentPane(minigame);
                 parentFrame.revalidate();
             });
-        } else {
+        }  else if (name.equals("Leaderboard")) {
+            button.addActionListener(e -> {
+                Leaderboard lb = new Leaderboard(parentFrame);
+                parentFrame.setContentPane(lb);
+                parentFrame.revalidate();
+            });
+        }else {
             button.addActionListener(e -> JOptionPane.showMessageDialog(Menu.this, name + " clicked"));
         }
 
