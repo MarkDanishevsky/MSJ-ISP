@@ -34,7 +34,7 @@ public class Main {
     public static void main(String[] args) throws FontFormatException, IOException {
         AthensClassic24 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(24f);
         AthensClassic18 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(18f);
-        AthensClassic18 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(26f);
+        AthensClassic26 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(26f);
 
         frame = new JFrame("1984 AI - MSJ");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

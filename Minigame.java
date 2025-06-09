@@ -97,7 +97,7 @@ public class Minigame extends JPanel {
                 SwingConstants.CENTER);
 
         // Set font for headline labels to Quantico, plain, 16+3=19
-        Font headlineFont = new Font("Quantico", Font.PLAIN, 19);
+        Font headlineFont = Main.AthensClassic24;
         headlineLabel0.setFont(headlineFont);
         headlineLabel1.setFont(headlineFont);
         headlineLabel2.setFont(headlineFont);
@@ -123,7 +123,7 @@ public class Minigame extends JPanel {
         slider3ResultLabel = new JLabel(" ", SwingConstants.CENTER);
 
         // Set font for result labels, Quantico plain 14+3=17
-        Font resultFont = new Font("Quantico", Font.PLAIN, 17);
+        Font resultFont = Main.AthensClassic18;
         slider1ResultLabel.setFont(resultFont);
         slider2ResultLabel.setFont(resultFont);
         slider3ResultLabel.setFont(resultFont);
@@ -147,7 +147,7 @@ public class Minigame extends JPanel {
 // --- Submit Button ---
         JButton submitButton = new JButton("Submit");
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        submitButton.setFont(new Font("Quantico", Font.BOLD, 17));
+        submitButton.setFont(Main.AthensClassic18);
         submitButton.addActionListener(e -> {
             int[] userChoices = {slider1Value, slider2Value, slider3Value};
             JLabel[] resultLabels = {slider1ResultLabel, slider2ResultLabel, slider3ResultLabel};
@@ -185,7 +185,7 @@ public class Minigame extends JPanel {
 // --- Close Button ---
         JButton closeButton = new JButton("Close");
         closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        closeButton.setFont(new Font("Quantico", Font.BOLD, 17));
+        closeButton.setFont(Main.AthensClassic18);
         closeButton.addActionListener(e -> {
             parentFrame.setContentPane(new Menu());
             parentFrame.revalidate();
@@ -221,15 +221,13 @@ public class Minigame extends JPanel {
         slider.setPaintTicks(true);
 
         Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-        // Set font for slider labels to Quantico plain 13+3=16
-        Font sliderLabelFont = new Font("Quantico", Font.PLAIN, 16);
 
         JLabel biasLabel = new JLabel("Bias");
-        biasLabel.setFont(sliderLabelFont);
+        biasLabel.setFont(Main.AthensClassic18);
         JLabel fairLabel = new JLabel("Fair");
-        fairLabel.setFont(sliderLabelFont);
+        fairLabel.setFont(Main.AthensClassic18);
         JLabel FakeLabel = new JLabel("Fake");
-        FakeLabel.setFont(sliderLabelFont);
+        FakeLabel.setFont(Main.AthensClassic18);
 
         labelTable.put(0, biasLabel);
         labelTable.put(1, fairLabel);

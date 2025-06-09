@@ -233,10 +233,18 @@ public class HeadlineChooser extends JPanel {
                     selectedPreviewIndex = index;
                     updatePreview();
                 }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    rect.setBackground(new Color(140, 27, 50));
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    rect.setBackground(Color.LIGHT_GRAY);
+                }
             });
 
             if (i == selectedPreviewIndex) {
-                rect.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+                rect.setBorder(BorderFactory.createLineBorder(new Color(140, 27, 50), 3));
             } else {
                 rect.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
             }
