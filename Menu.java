@@ -95,8 +95,8 @@ public class Menu extends JPanel {
         } else if (name.equals("Game")) {
             button.addActionListener(e -> {
                 SwingUtilities.invokeLater(() -> {
-                    HeadlineChooser headlineChooser = new HeadlineChooser();
-                    parentFrame.setContentPane(headlineChooser);
+                    MainGame game = new MainGame();
+                    parentFrame.setContentPane(game);
                     parentFrame.setVisible(true);
                 });
             });

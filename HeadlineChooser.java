@@ -95,7 +95,7 @@ public class HeadlineChooser extends JPanel {
         }
     };
 
-    private final ArrayList<String> selectedHeadlines = new ArrayList<>();
+    final ArrayList<String> selectedHeadlines = new ArrayList<>();
     private int currentIndex = 0;
 
     private final JLabel factLabel = new JLabel();
@@ -105,17 +105,27 @@ public class HeadlineChooser extends JPanel {
     private final JLabel pageLabel = new JLabel();
 
     public HeadlineChooser() {
+        JLabel title = new JLabel("The Eurasia Times", SwingConstants.CENTER);
+        title.setFont(Main.AthensClassic.deriveFont(26f));
+        title.setBounds(450, 20, 500, 30);
+        add(title);
+
+        JLabel date = new JLabel("June 21st, 1984", SwingConstants.CENTER);
+        date.setFont(Main.AthensClassic.deriveFont(18f));
+        date.setBounds(450, 50, 500, 20);
+        add(date);
+
         setLayout(null); // manual positioning
 
         // Fact Label
-        factLabel.setBounds(30, 20, 400, 40);
+        factLabel.setBounds(30, 60, 400, 40);
         factLabel.setFont(Main.AthensClassic);
         add(factLabel);
 
         // Headline options
         for (int i = 0; i < 3; i++) {
             options[i] = new JRadioButton();
-            options[i].setBounds(30, 80 + i * 40, 400, 30);
+            options[i].setBounds(30, 120 + i * 40, 400, 30);
             options[i].setFont(Main.AthensClassic);
             int finalI = i;
             options[i].addActionListener(e -> {
@@ -131,7 +141,7 @@ public class HeadlineChooser extends JPanel {
 
         // Arrows
         JButton leftArrow = new JButton("<");
-        leftArrow.setBounds(30, 220, 50, 30);
+        leftArrow.setBounds(30, 260, 50, 30);
         leftArrow.setFont(Main.AthensClassic);
         leftArrow.addActionListener(e -> {
             if (currentIndex > 0) {
@@ -144,7 +154,7 @@ public class HeadlineChooser extends JPanel {
         
 
         JButton rightArrow = new JButton(">");
-        rightArrow.setBounds(327, 220, 50, 30);
+        rightArrow.setBounds(327, 260, 50, 30);
         rightArrow.setFont(Main.AthensClassic);
         rightArrow.addActionListener(e -> {
             if (currentIndex < facts.length - 1) {
@@ -154,13 +164,13 @@ public class HeadlineChooser extends JPanel {
         });
         add(rightArrow);
 
-        pageLabel.setBounds(130, 220, 150, 30);
+        pageLabel.setBounds(130, 260, 150, 30);
         pageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pageLabel.setFont(Main.AthensClassic);
         add(pageLabel);
 
         // Preview rectangles
-        previewPanel.setBounds(450, 20, 500, 400);
+        previewPanel.setBounds(450, 120, 500, 400);
         previewPanel.setLayout(null);
         add(previewPanel);
 
