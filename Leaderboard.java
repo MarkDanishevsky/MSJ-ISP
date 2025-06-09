@@ -24,17 +24,29 @@ public class Leaderboard extends JPanel {
         }
         setLayout(new BorderLayout());
 
+        // Prepare title + left header
         int titleTopPadding = 146; 
+        Font titleFont = FONT.deriveFont(42f);
+        // Main title
         JLabel title = new JLabel("Most Valuable Employees", SwingConstants.CENTER);
-        title.setFont(FONT);
-        title.setForeground(Color.BLACK);
-        title.setBorder(BorderFactory.createEmptyBorder(titleTopPadding, 0, 0, 0));
-        Font titleFont = FONT.deriveFont(42f); 
         title.setFont(titleFont);
-        add(title, BorderLayout.NORTH);
-        
+        title.setForeground(Color.BLACK);
+        // Left-hand heading
+        JLabel leftHeading = new JLabel("      Revenue", SwingConstants.LEFT);
+        leftHeading.setFont(titleFont);
+        leftHeading.setForeground(Color.BLACK);
+
+        // Container for both
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(titleTopPadding, 40, 0, 50));
+        headerPanel.add(leftHeading, BorderLayout.WEST);
+        headerPanel.add(title, BorderLayout.CENTER);
+
+        add(headerPanel, BorderLayout.NORTH);
+
         // Read and sort entries
-        List<Entry> entries = loadEntries("scores.csv");
+        List<Entry> entries = loadEntries("assets/scores.csv");
         selectionSortDescending(entries);
 
         // Panel for manual labels
@@ -46,8 +58,10 @@ public class Leaderboard extends JPanel {
         int count = Math.min(entries.size(), MAX_ENTRIES);
         for (int i = 0; i < count; i++) {
             Entry e = entries.get(i);
-            JLabel label = new JLabel(String.format("                 %-20d  %s", e.score , e.name));
-            label.setFont(FONT);
+            JLabel label = new JLabel(
+                String.format("               %-50s  %s", e.score, e.name)
+            );
+            label.setFont(Main.AthensClassic26);
             label.setForeground(Color.BLACK);
             listPanel.add(label);
             listPanel.add(Box.createRigidArea(new Dimension(0, VERTICAL_GAP)));
@@ -101,7 +115,7 @@ public class Leaderboard extends JPanel {
         return list;
     }
 
-    // Selection sort by score
+    // Selection sort descending by score
     private void selectionSortDescending(List<Entry> list) {
         for (int i = 0; i < list.size() - 1; i++) {
             int maxIdx = i;
