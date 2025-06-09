@@ -29,9 +29,9 @@ public class MainGame extends JPanel {
 
         // Intro screen
         JPanel introScreen = new JPanel(new BorderLayout());
-        introLabel.setFont(Main.AthensClassic.deriveFont(24f));
+        introLabel.setFont(Main.AthensClassic24);
         introScreen.add(introLabel, BorderLayout.CENTER);
-        startButton.setFont(Main.AthensClassic);
+        startButton.setFont(Main.AthensClassic18);
         startButton.addActionListener(e -> showChooser());
         introScreen.add(startButton, BorderLayout.SOUTH);
 
@@ -39,14 +39,14 @@ public class MainGame extends JPanel {
         JPanel chooserScreen = new JPanel(new BorderLayout());
         chooserScreen.add(chooser, BorderLayout.CENTER);
         JButton submitButton = new JButton("Submit Headlines");
-        submitButton.setFont(Main.AthensClassic);
+        submitButton.setFont(Main.AthensClassic18);
         submitButton.addActionListener(e -> showResult());
         chooserScreen.add(submitButton, BorderLayout.SOUTH);
 
         // Result screen
         JPanel resultScreen = new JPanel(new BorderLayout());
         resultScreen.add(indicatorPanel, BorderLayout.CENTER);
-        nextButton.setFont(Main.AthensClassic);
+        nextButton.setFont(Main.AthensClassic18);
         nextButton.addActionListener(e -> {
             round++;
             if (round < TOTAL_ROUNDS) {
@@ -61,7 +61,7 @@ public class MainGame extends JPanel {
 
         // End screen
         JPanel endScreen = new JPanel(new BorderLayout());
-        endLabel.setFont(Main.AthensClassic.deriveFont(24f));
+        endLabel.setFont(Main.AthensClassic24);
         endScreen.add(endLabel, BorderLayout.CENTER);
 
         // Add all screens
@@ -78,7 +78,7 @@ public class MainGame extends JPanel {
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(chooser, BorderLayout.CENTER);
         JButton submitButton = new JButton("Submit Headlines");
-        submitButton.setFont(Main.AthensClassic);
+        submitButton.setFont(Main.AthensClassic18);
         submitButton.addActionListener(e -> showResult());
         panel.add(submitButton, BorderLayout.SOUTH);
         return panel;

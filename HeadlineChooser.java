@@ -29,14 +29,16 @@ import java.util.Arrays;
 
 public class HeadlineChooser extends JPanel {
     private int selectedPreviewIndex = -1;
-    
+    String[] dates = {"21st", "22nd", "23rd"};
+    int dateNum = 0;
+
     Event[] events = {
         new Event(
             "The local lake reached record high levels.",
             new ArrayList<>(Arrays.asList(
                 new Headline("Lake floods nearby park", 1),
                 new Headline("Record-breaking rainfall hits region", 2),
-                new Headline("Nothing unusual in lake levels, say officials", 3)
+                new Headline("Nothing unusual in lake levels, say officials", 2)
             ))
         ),
         new Event(
@@ -105,13 +107,14 @@ public class HeadlineChooser extends JPanel {
     private final JLabel pageLabel = new JLabel();
 
     public HeadlineChooser() {
-        JLabel title = new JLabel("The Eurasia Times", SwingConstants.CENTER);
-        title.setFont(Main.AthensClassic.deriveFont(26f));
+        JLabel title = new JLabel("The Oceania Times", SwingConstants.CENTER);
+        title.setFont(Main.AthensClassic26);
         title.setBounds(450, 20, 500, 30);
         add(title);
 
-        JLabel date = new JLabel("June 21st, 1984", SwingConstants.CENTER);
-        date.setFont(Main.AthensClassic.deriveFont(18f));
+        JLabel date = new JLabel("June " + dates[dateNum] + ", 1984", SwingConstants.CENTER);
+        dateNum++;
+        date.setFont(Main.AthensClassic18);
         date.setBounds(450, 50, 500, 20);
         add(date);
 
@@ -119,14 +122,14 @@ public class HeadlineChooser extends JPanel {
 
         // Fact Label
         factLabel.setBounds(30, 60, 400, 40);
-        factLabel.setFont(Main.AthensClassic);
+        factLabel.setFont(Main.AthensClassic18);
         add(factLabel);
 
         // Headline options
         for (int i = 0; i < 3; i++) {
             options[i] = new JRadioButton();
             options[i].setBounds(30, 120 + i * 40, 400, 30);
-            options[i].setFont(Main.AthensClassic);
+            options[i].setFont(Main.AthensClassic18);
             int finalI = i;
             options[i].addActionListener(e -> {
                 while (selectedHeadlines.size() <= currentIndex) {
@@ -142,7 +145,7 @@ public class HeadlineChooser extends JPanel {
         // Arrows
         JButton leftArrow = new JButton("<");
         leftArrow.setBounds(30, 260, 50, 30);
-        leftArrow.setFont(Main.AthensClassic);
+        leftArrow.setFont(Main.AthensClassic18);
         leftArrow.addActionListener(e -> {
             if (currentIndex > 0) {
                 currentIndex--;
@@ -155,7 +158,7 @@ public class HeadlineChooser extends JPanel {
 
         JButton rightArrow = new JButton(">");
         rightArrow.setBounds(327, 260, 50, 30);
-        rightArrow.setFont(Main.AthensClassic);
+        rightArrow.setFont(Main.AthensClassic18);
         rightArrow.addActionListener(e -> {
             if (currentIndex < facts.length - 1) {
                 currentIndex++;
@@ -166,7 +169,7 @@ public class HeadlineChooser extends JPanel {
 
         pageLabel.setBounds(130, 260, 150, 30);
         pageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        pageLabel.setFont(Main.AthensClassic);
+        pageLabel.setFont(Main.AthensClassic18);
         add(pageLabel);
 
         // Preview rectangles
@@ -177,7 +180,7 @@ public class HeadlineChooser extends JPanel {
         // Submit button at bottom right
         JButton submitButton = new JButton("Submit");
         submitButton.setBounds(800, 430, 120, 30);
-        submitButton.setFont(Main.AthensClassic);
+        submitButton.setFont(Main.AthensClassic18);
         submitButton.addActionListener(e -> {
             
             // Validation: all events have a headline, no empty, preview index valid
@@ -240,7 +243,7 @@ public class HeadlineChooser extends JPanel {
 
             if (i < selectedHeadlines.size()) {
                 JLabel label = new JLabel(selectedHeadlines.get(i));
-                label.setFont(Main.AthensClassic);
+                label.setFont(Main.AthensClassic18);
                 rect.add(label, BorderLayout.CENTER);
             }
 

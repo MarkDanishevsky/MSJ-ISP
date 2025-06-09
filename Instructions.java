@@ -34,7 +34,7 @@ public class Instructions extends JPanel {
             + "For each event, select one headline for the article. Once you have gone through each of the events, choose one article to be the headline article.",
             SwingConstants.CENTER
         );
-        instructionsLabel.setFont(Main.AthensClassic);
+        instructionsLabel.setFont(Main.AthensClassic18);
         add(instructionsLabel, BorderLayout.CENTER);
 
         JButton backButton = new JButton("Back to Menu");

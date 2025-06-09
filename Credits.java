@@ -38,7 +38,7 @@ public class Credits extends JPanel {
             + "</div></html>",
             SwingConstants.CENTER
         );
-        instructionsLabel.setFont(Main.AthensClassic);
+        instructionsLabel.setFont(Main.AthensClassic18);
         add(instructionsLabel, BorderLayout.CENTER);
 
         JButton backButton = new JButton("Back to Menu");

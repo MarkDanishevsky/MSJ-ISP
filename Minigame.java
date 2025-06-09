@@ -80,7 +80,7 @@ public class Minigame extends JPanel {
                         + factText + "</b></div></html>");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         // Set font to Quantico, bold, 23 (20 + 3)
-        titleLabel.setFont(new Font("Quantico", Font.BOLD, 23));
+        titleLabel.setFont(Main.AthensClassic24);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(187, 0, titleBottomPadding, 0));
         add(titleLabel, BorderLayout.NORTH);
 
@@ -213,8 +213,9 @@ public class Minigame extends JPanel {
         parentFrame.revalidate();
     }
 
-        private JSlider createThreeChoiceSlider() {
+    private JSlider createThreeChoiceSlider() {
         JSlider slider = new JSlider(0, 2, 1);
+        slider.setUI(new CustomSlider(slider));
         slider.setSnapToTicks(true);
         slider.setMajorTickSpacing(1);
         slider.setPaintTicks(true);

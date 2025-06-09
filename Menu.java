@@ -33,8 +33,8 @@ public class Menu extends JPanel {
         // Load and set custom font for buttons
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Main.AthensClassic);
-            UIManager.put("Button.font", Main.AthensClassic);
+            ge.registerFont(Main.AthensClassic24);
+            UIManager.put("Button.font", Main.AthensClassic24);
         } catch (Exception e) {
             e.printStackTrace();
         }
