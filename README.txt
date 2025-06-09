@@ -1,0 +1,1 @@
+To start playing the game, run the Main.java file.
