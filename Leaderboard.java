@@ -1,3 +1,25 @@
+/*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - -      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
+ * MSJ Development Inc. (2025)
+ * ISP
+ * Client: Ms. Krasteva (ICS4U1, S2)
+ * Date: Tuesday June 3rd, 2025
+ * 
+ * This is the leaderboard for our game. It includes selection sort and sequential search
+ */
+
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -32,8 +54,8 @@ public class Leaderboard extends JPanel {
         title.setFont(titleFont);
         title.setForeground(Color.BLACK);
         // Left-hand heading
-        JLabel leftHeading = new JLabel("      Revenue", SwingConstants.LEFT);
-        leftHeading.setFont(titleFont);
+        JLabel leftHeading = new JLabel("             Revenue", SwingConstants.LEFT);
+        leftHeading.setFont(Main.AthensClassic26);
         leftHeading.setForeground(Color.BLACK);
 
         // Container for both
@@ -76,16 +98,13 @@ public class Leaderboard extends JPanel {
 
         // Back button
         JButton back = new JButton("Back to Menu");
+        back.setBackground(Color.WHITE);
         back.setFont(FONT);
-        back.setOpaque(false);
-        back.setForeground(Color.WHITE);
-        back.setContentAreaFilled(false);
         back.addActionListener(e -> {
-            parentFrame.setContentPane(new Menu(parentFrame));
+            parentFrame.setContentPane(new Menu());
             parentFrame.revalidate();
         });
         JPanel btnPanel = new JPanel();
-        btnPanel.setOpaque(false);
         btnPanel.add(back);
         add(btnPanel, BorderLayout.SOUTH);
     }
@@ -128,32 +147,5 @@ public class Leaderboard extends JPanel {
             list.set(i, list.get(maxIdx));
             list.set(maxIdx, temp);
         }
-    }
-
-    private static class Entry {
-        String name;
-        int score;
-        Entry(String n, int s) { name = n; score = s; }
-    }
-
-    static class Menu extends JPanel {
-        public Menu(JFrame parentFrame) {
-            setLayout(new BorderLayout());
-            JLabel lbl = new JLabel("Main Menu", SwingConstants.CENTER);
-            lbl.setFont(FONT);
-            lbl.setForeground(Color.WHITE);
-            add(lbl, BorderLayout.CENTER);
-        }
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Leaderboard Tester");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(400, 400);
-            frame.setLocationRelativeTo(null);
-            frame.setContentPane(new Leaderboard(frame));
-            frame.setVisible(true);
-        });
     }
 }

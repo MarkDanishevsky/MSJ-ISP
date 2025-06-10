@@ -1,3 +1,24 @@
+/*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - -      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
+ * MSJ Development Inc. (2025)
+ * ISP
+ * Client: Ms. Krasteva (ICS4U1, S2)
+ * Date: Tuesday June 3rd, 2025
+ * 
+ * This is the leaderboard for our game. It includes selection sort and sequential search
+ */
+
 import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.awt.*;
