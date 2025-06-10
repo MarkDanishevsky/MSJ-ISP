@@ -143,13 +143,13 @@ public class Minigame extends JPanel {
         submitButton.setBackground(baseColor);
         submitButton.setForeground(Color.WHITE);
         submitButton.setFocusPainted(false);
-        submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+        submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
         submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mouseEntered(java.awt.event.MouseEvent evt) {
-                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 3), padding));
+                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 5), padding));
             }
             @Override public void mouseExited(java.awt.event.MouseEvent evt) {
-                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
             }
         });
         submitButton.addActionListener(e -> handleSubmit(parentFrame));
@@ -161,13 +161,13 @@ public class Minigame extends JPanel {
         closeButton.setBackground(baseColor);
         closeButton.setForeground(Color.WHITE);
         closeButton.setFocusPainted(false);
-        closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+        closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
         closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override public void mouseEntered(java.awt.event.MouseEvent evt) {
-                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 3), padding));
+                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 5), padding));
             }
             @Override public void mouseExited(java.awt.event.MouseEvent evt) {
-                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 3), padding));
+                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
             }
         });
         closeButton.addActionListener(e -> {
@@ -222,7 +222,9 @@ public class Minigame extends JPanel {
                     showScenario(currentRound);
                     submitButton.setEnabled(true);
                 } else {
-                    JOptionPane.showMessageDialog(this, "You’ve completed all " + scenarios.size() + " rounds. Press close to return to the menu.");
+                    JOptionPane.showMessageDialog(this, "You’ve completed all " + scenarios.size() + " rounds.");
+                    parentFrame.setContentPane(new Menu());
+                    parentFrame.revalidate();
                 }
             }) {{ setRepeats(false); start(); }};
         }
