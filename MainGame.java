@@ -1,6 +1,11 @@
 import java.awt.*;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MainGame extends JPanel {
     private int round = 0;
@@ -18,6 +23,8 @@ public class MainGame extends JPanel {
 
     private JLabel endLabel = new JLabel("<html><center>Thanks for playing!<br>We hope you enjoyed influencing public opinion!</center></html>", SwingConstants.CENTER);
 
+    private static BufferedImage loyaltyMeter;
+
     public static void run() {
         MainGame gamePanel = new MainGame();
         Main.frame.setContentPane(gamePanel);
@@ -25,6 +32,18 @@ public class MainGame extends JPanel {
     }
 
     public MainGame() {
+        try {
+            BufferedImage raw = ImageIO.read(new File("assets/loyalty_meter.png"));
+            loyaltyMeter = new BufferedImage(500, 300, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = loyaltyMeter.createGraphics();
+            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+            g.drawImage(raw, 0, 0, 200, 200, null);
+            g.dispose();
+        } catch (IOException ex) {
+            System.out.println("No file assets/loyalty_meter.png");
+        }
+
+
         setLayout(new BorderLayout());
 
         // Intro screen
@@ -123,6 +142,10 @@ public class MainGame extends JPanel {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+
+            g2.drawImage(loyaltyMeter, Main.frame.getWidth() / 2 - 100 + 3, Main.frame.getHeight() / 2 - 100 - 18, this);
+
 
             int centerX = getWidth() / 2;
             int centerY = getHeight() / 2;

@@ -26,76 +26,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class HeadlineChooser extends JPanel {
     private int selectedPreviewIndex = -1;
     String[] dates = {"21st", "22nd", "23rd"};
     int dateNum = 0;
 
-    Event[] events = {
-        new Event(
-            "The local lake reached record high levels.",
-            new ArrayList<>(Arrays.asList(
-                new Headline("Lake floods nearby park", 1),
-                new Headline("Record-breaking rainfall hits region", 2),
-                new Headline("Nothing unusual in lake levels, say officials", 2)
-            ))
-        ),
-        new Event(
-            "A new school policy was introduced.",
-            new ArrayList<>(Arrays.asList(
-                new Headline("Students protest new school rules", 1),
-                new Headline("School board implements changes", 2),
-                new Headline("Strict new policy raises eyebrows", 3)
-            ))
-        ),
-        new Event(
-            "Recycling rates increased by 15%.",
-            new ArrayList<>(Arrays.asList(
-                new Headline("City applauds recycling success", 1),
-                new Headline("More residents sorting waste correctly", 2),
-                new Headline("Critics say increase is 'exaggerated'", 3)
-            ))
-        ),
-        new Event(
-            "The mayor announced a new housing plan.",
-            new ArrayList<>(Arrays.asList(
-                new Headline("Mayor promises affordable housing", 1),
-                new Headline("Bold new plan to tackle homelessness", 2),
-                new Headline("Some call housing plan unrealistic", 3)
-            ))
-        )
-    };
-
-    private final String[] facts = {
-        "The local lake reached record high levels.",
-        "A new school policy was introduced.",
-        "Recycling rates increased by 15%.",
-        "The mayor announced a new housing plan."
-    };
-
-    private final String[][] headlineOptions = {
-        {
-            "Lake floods nearby park",
-            "Record-breaking rainfall hits region",
-            "Nothing unusual in lake levels, say officials"
-        },
-        {
-            "Students protest new school rules",
-            "School board implements changes",
-            "Strict new policy raises eyebrows"
-        },
-        {
-            "City applauds recycling success",
-            "More residents sorting waste correctly",
-            "Critics say increase is 'exaggerated'"
-        },
-        {
-            "Mayor promises affordable housing",
-            "Bold new plan to tackle homelessness",
-            "Some call housing plan unrealistic"
-        }
-    };
+    Event[] events = loadEventsFromCSV("assets/headlines.csv");
 
     final ArrayList<String> selectedHeadlines = new ArrayList<>();
     private int currentIndex = 0;
@@ -143,7 +83,7 @@ public class HeadlineChooser extends JPanel {
                 while (selectedHeadlines.size() <= currentIndex) {
                     selectedHeadlines.add("");
                 }
-                selectedHeadlines.set(currentIndex, headlineOptions[currentIndex][finalI]);
+                selectedHeadlines.set(currentIndex, events[currentIndex].headlineOptions[finalI].content);
                 updatePreview();
             });
             group.add(options[i]);
@@ -168,7 +108,7 @@ public class HeadlineChooser extends JPanel {
         rightArrow.setBounds(327, 260, 50, 30);
         rightArrow.setFont(Main.AthensClassic24);
         rightArrow.addActionListener(e -> {
-            if (currentIndex < facts.length - 1) {
+            if (currentIndex < events.length - 1) {
                 currentIndex++;
                 updateLeftPanel();
             }
@@ -192,7 +132,7 @@ public class HeadlineChooser extends JPanel {
         submitButton.addActionListener(e -> {
             
             // Validation: all events have a headline, no empty, preview index valid
-            if (selectedHeadlines.size() < facts.length || selectedHeadlines.contains("") || selectedPreviewIndex < 0) {
+            if (selectedHeadlines.size() < events.length || selectedHeadlines.contains("") || selectedPreviewIndex < 0) {
                 JOptionPane.showMessageDialog(this, "Please select a headline for all events and choose a main article.", "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -210,20 +150,20 @@ public class HeadlineChooser extends JPanel {
     }
 
     private void updateLeftPanel() {
-        factLabel.setText(facts[currentIndex]);
+        factLabel.setText(events[currentIndex].factualStatement);
         group.clearSelection();
         for (int i = 0; i < 3; i++) {
-            options[i].setText(headlineOptions[currentIndex][i]);
+            options[i].setText(events[currentIndex].headlineOptions[i].content);
         }
         if (currentIndex < selectedHeadlines.size()) {
             String selected = selectedHeadlines.get(currentIndex);
             for (int i = 0; i < 3; i++) {
-                if (headlineOptions[currentIndex][i].equals(selected)) {
+                if (events[currentIndex].headlineOptions[i].content.equals(selected)) {
                     options[i].setSelected(true);
                 }
             }
         }
-        pageLabel.setText("Page " + (currentIndex + 1) + " of " + facts.length);
+        pageLabel.setText("Page " + (currentIndex + 1) + " of " + events.length);
     }
 
     private void updatePreview() {
@@ -267,6 +207,42 @@ public class HeadlineChooser extends JPanel {
         }
         previewPanel.repaint();
         previewPanel.revalidate();
+    }
+
+    private Event[] loadEventsFromCSV(String filename) {
+        ArrayList<Event> eventList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                ArrayList<String> fields = new ArrayList<>();
+                StringBuilder sb = new StringBuilder();
+                boolean inQuotes = false;
+                for (char c : line.toCharArray()) {
+                    if (c == '\"') {
+                        inQuotes = !inQuotes;
+                    } else if (c == ',' && !inQuotes) {
+                        fields.add(sb.toString().trim());
+                        sb.setLength(0);
+                    } else {
+                        sb.append(c);
+                    }
+                }
+                fields.add(sb.toString().trim());
+
+                if (fields.size() >= 7) {
+                    String fact = fields.get(0);
+                    Headline[] headlines = {
+                        new Headline(fields.get(1), Integer.parseInt(fields.get(2))),
+                        new Headline(fields.get(3), Integer.parseInt(fields.get(4))),
+                        new Headline(fields.get(5), Integer.parseInt(fields.get(6)))
+                    };
+                    eventList.add(new Event(fact, headlines));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return eventList.toArray(new Event[0]);
     }
 
     // To run standalone for testing:

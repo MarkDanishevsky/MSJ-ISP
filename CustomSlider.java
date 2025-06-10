@@ -11,8 +11,8 @@ class CustomSlider extends BasicSliderUI {
     public CustomSlider(JSlider slider) {
         super(slider);
         try {
-            BufferedImage raw = ImageIO.read(new File("assets/pointer.jpg"));
-            pointerImage = raw.getScaledInstance(12, 22, Image.SCALE_SMOOTH); // Adjust size as needed
+            BufferedImage raw = ImageIO.read(new File("assets/pointer.png"));
+            pointerImage = raw.getScaledInstance(8 * 3, 10 * 3, Image.SCALE_SMOOTH); // Adjust size as needed
             System.out.println("Custom pointer loaded successfully.");
         } catch (IOException e) {
             System.err.println("Error loading pointer.jpg: " + e.getMessage());
