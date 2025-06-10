@@ -1,9 +1,37 @@
+/*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - -      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
+ * MSJ Development Inc. (2025)
+ * ISP
+ * Client: Ms. Krasteva (ICS4U1, S2)
+ * Date: Monday June 9th, 2025
+ * 
+ * This is the minigame of our game.
+ */
+
 import java.awt.*;
 import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+/**
+ * A Minigame JPanel that presents fact-based scenarios where the user
+ * categorizes headlines as "Bias," "Fair," or "Fake" using sliders.
+ * 
+ * The game cycles through multiple rounds with randomized headline order
+ * and provides feedback on user selections.
+ */
 public class Minigame extends JPanel {
     private static final Font TITLE_FONT = Main.AthensClassic24;
     private static final Font HEADLINE_FONT = Main.AthensClassic24;
@@ -29,6 +57,12 @@ public class Minigame extends JPanel {
     private int currentRound = 0;
     private ArrayList<Integer> correctAnswers = new ArrayList<>(Arrays.asList(0, 1, 2)); // bias, fair, fake
 
+    /**
+     * Constructs a new Minigame panel inside the given parent JFrame.
+     * Loads scenarios, initializes UI components, and sets up the game.
+     *
+     * @param parentFrame the JFrame in which this Minigame will be displayed
+     */
     public Minigame(JFrame parentFrame) {
         backgroundBackdrop = new ImageIcon("assets/background.png").getImage();
         backgroundImage = new ImageIcon("assets/minigame_background.png").getImage();
@@ -48,6 +82,13 @@ public class Minigame extends JPanel {
         parentFrame.revalidate();
     }
 
+    /**
+     * Loads all scenarios from the given CSV file.
+     * Each scenario consists of four lines representing the fact and three
+     * headlines in that order.
+     *
+     * @param filename the path to the CSV file containing scenario data
+     */
     private void loadAllScenarios(String filename) {
         scenarios = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -58,26 +99,29 @@ public class Minigame extends JPanel {
                     lines.add(line.trim());
                 }
             }
-            for (int i = 0; i + 3 < lines.size(); i += 4) {
-                scenarios.add(new String[]{
-                    lines.get(i),
-                    lines.get(i + 1),
-                    lines.get(i + 2),
-                    lines.get(i + 3)
+            for (int i = 0; i + 3 < lines.size(); i += 4) { // adds each group of 4 lines as a scenario
+                scenarios.add(new String[] {
+                        lines.get(i),
+                        lines.get(i + 1),
+                        lines.get(i + 2),
+                        lines.get(i + 3)
                 });
             }
         } catch (IOException e) {
             e.printStackTrace();
             scenarios = new ArrayList<>();
-            scenarios.add(new String[]{
-                "No fact found.",
-                "Missing headline",
-                "Missing headline",
-                "Missing headline"
+            scenarios.add(new String[] {
+                    "No fact found.",
+                    "Missing headline",
+                    "Missing headline",
+                    "Missing headline"
             });
         }
     }
 
+    /**
+     * Initializes and configures the title label at the top of the panel.
+     */
     private void initHeader() {
         titleLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel.setFont(TITLE_FONT);
@@ -85,21 +129,14 @@ public class Minigame extends JPanel {
         add(titleLabel, BorderLayout.NORTH);
     }
 
+    /**
+     * Initializes the main grid panel containing headline labels,
+     * sliders for user input, and result feedback labels.
+     */
     private void initGrid() {
         JPanel gridPanel = new JPanel(new GridLayout(3, 3, 50, 0));
         gridPanel.setOpaque(false);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, -20, 100));
-
-        headlineLabel0 = new JLabel("", SwingConstants.CENTER);
-        headlineLabel1 = new JLabel("", SwingConstants.CENTER);
-        headlineLabel2 = new JLabel("", SwingConstants.CENTER);
-        headlineLabel0.setFont(HEADLINE_FONT);
-        headlineLabel1.setFont(HEADLINE_FONT);
-        headlineLabel2.setFont(HEADLINE_FONT);
-
-        gridPanel.add(headlineLabel0);
-        gridPanel.add(headlineLabel1);
-        gridPanel.add(headlineLabel2);
 
         JSlider slider1 = createThreeChoiceSlider();
         JSlider slider2 = createThreeChoiceSlider();
@@ -126,6 +163,11 @@ public class Minigame extends JPanel {
         add(gridPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Initializes the submit and close buttons along with their event handlers.
+     *
+     * @param parentFrame the JFrame containing this panel, used to switch views
+     */
     private void initButtons(JFrame parentFrame) {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
@@ -136,6 +178,7 @@ public class Minigame extends JPanel {
         Color hoverColor = Color.decode("#990030");
         Border padding = BorderFactory.createEmptyBorder(10, 20, 10, 20);
 
+        // submit button and its functions
         submitButton = new JButton("Submit");
         submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.setFont(Main.AthensClassic18);
@@ -143,17 +186,24 @@ public class Minigame extends JPanel {
         submitButton.setBackground(baseColor);
         submitButton.setForeground(Color.WHITE);
         submitButton.setFocusPainted(false);
-        submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
+        submitButton
+                .setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
         submitButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override public void mouseEntered(java.awt.event.MouseEvent evt) {
-                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 5), padding));
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                submitButton.setBorder(
+                        BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 5), padding));
             }
-            @Override public void mouseExited(java.awt.event.MouseEvent evt) {
-                submitButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                submitButton.setBorder(
+                        BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
             }
         });
         submitButton.addActionListener(e -> handleSubmit(parentFrame));
 
+        // close button and its functions
         JButton closeButton = new JButton("Close");
         closeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         closeButton.setFont(Main.AthensClassic18);
@@ -161,16 +211,22 @@ public class Minigame extends JPanel {
         closeButton.setBackground(baseColor);
         closeButton.setForeground(Color.WHITE);
         closeButton.setFocusPainted(false);
-        closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
+        closeButton
+                .setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
         closeButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override public void mouseEntered(java.awt.event.MouseEvent evt) {
-                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 5), padding));
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                closeButton.setBorder(
+                        BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(hoverColor, 5), padding));
             }
-            @Override public void mouseExited(java.awt.event.MouseEvent evt) {
-                closeButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                closeButton.setBorder(
+                        BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(baseColor, 5), padding));
             }
         });
-        closeButton.addActionListener(e -> {
+        closeButton.addActionListener(e -> { // auto return to menu after 3 rounds are done
             parentFrame.setContentPane(new Menu());
             parentFrame.revalidate();
         });
@@ -181,6 +237,12 @@ public class Minigame extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Creates a JSlider configured to allow selection between three options: Bias,
+     * Fair, Fake.
+     *
+     * @return a configured JSlider instance
+     */
     private JSlider createThreeChoiceSlider() {
         JSlider slider = new JSlider(0, 2, 1);
         slider.setUI(new CustomSlider(slider));
@@ -197,15 +259,31 @@ public class Minigame extends JPanel {
         return slider;
     }
 
+    /**
+     * Handles the user clicking the submit button.
+     * Checks user choices against correct answers, updates result labels,
+     * and proceeds to the next round or ends the game if completed.
+     *
+     * @param parentFrame the JFrame containing this panel, used to switch views
+     */
     private void handleSubmit(JFrame parentFrame) {
-        int[] userChoices = { slider1Value, slider2Value, slider3Value };
+        // user choices and correct answers in a tuple-like array in python
+        int[][] choicesAndCorrect = {
+                { slider1Value, correctAnswers.get(0) },
+                { slider2Value, correctAnswers.get(1) },
+                { slider3Value, correctAnswers.get(2) }
+        };
+
         JLabel[] resultLabels = { slider1ResultLabel, slider2ResultLabel, slider3ResultLabel };
-        String[] categories = { "bias", "fair", "fake" };
+        String[] categories = { "Bias", "Fair", "Fake" };
 
         boolean allCorrect = true;
         for (int i = 0; i < 3; i++) {
-            if (userChoices[i] == correctAnswers.get(i)) {
-                resultLabels[i].setText("Correct (" + categories[correctAnswers.get(i)] + ")");
+            int userChoice = choicesAndCorrect[i][0];
+            int correctChoice = choicesAndCorrect[i][1];
+
+            if (userChoice == correctChoice) {
+                resultLabels[i].setText("Correct (" + categories[correctChoice] + ")");
                 resultLabels[i].setForeground(new Color(0, 128, 0));
             } else {
                 resultLabels[i].setText("Incorrect. Please try again");
@@ -217,7 +295,7 @@ public class Minigame extends JPanel {
         if (allCorrect) {
             currentRound++;
             submitButton.setEnabled(false);
-            new javax.swing.Timer(1000, evt -> {
+            new javax.swing.Timer(1000, evt -> { // delay 1 second before showing next round
                 if (currentRound < scenarios.size()) {
                     showScenario(currentRound);
                     submitButton.setEnabled(true);
@@ -226,33 +304,55 @@ public class Minigame extends JPanel {
                     parentFrame.setContentPane(new Menu());
                     parentFrame.revalidate();
                 }
-            }) {{ setRepeats(false); start(); }};
+            }) {
+                {
+                    setRepeats(false);
+                    start();
+                }
+            };
         }
     }
 
+    /**
+     * Displays the scenario at the specified index,
+     * shuffles the order of correct answers for randomness,
+     * and resets sliders and result labels.
+     *
+     * @param idx the index of the scenario to show
+     */
     private void showScenario(int idx) {
-        // shuffle answer order each round
-        Collections.shuffle(correctAnswers);
+        Collections.shuffle(correctAnswers); // shuffle the order for randomness
 
         String[] s = scenarios.get(idx);
         titleLabel.setText(String.format(
-            "<html><div style='text-align:center;'>For your given fact, identify the correct category for each headline. There are three rounds.<br>Your fact is: <b>%s</b></div></html>", s[0]
-        ));
-        // display based on shuffled correctAnswers order
-        headlineLabel0.setText(html(s[ correctAnswers.get(0) + 1 ]));
-        headlineLabel1.setText(html(s[ correctAnswers.get(1) + 1 ]));
-        headlineLabel2.setText(html(s[ correctAnswers.get(2) + 1 ]));
+                "<html><div style='text-align:center;'>For your given fact, identify the correct category for each headline. There are three rounds.<br>Your fact is: <b>%s</b></div></html>",
+                s[0]));
+        // reset labels based on shuffled correctAnswers order
+        headlineLabel0.setText(html(s[correctAnswers.get(0) + 1]));
+        headlineLabel1.setText(html(s[correctAnswers.get(1) + 1]));
+        headlineLabel2.setText(html(s[correctAnswers.get(2) + 1]));
 
-        // reset sliders & results
+        // reset result labels
         slider1ResultLabel.setText(" ");
         slider2ResultLabel.setText(" ");
         slider3ResultLabel.setText(" ");
     }
 
+    /**
+     * Wraps given text with HTML tags for centered alignment in JLabel.
+     *
+     * @param text the text to wrap in HTML tags
+     * @return a string formatted with HTML centering tags
+     */
     private String html(String text) {
         return String.format("<html><div style='text-align:center;'>%s</div></html>", text);
     }
 
+    /**
+     * Paints the background images on the panel.
+     *
+     * @param g the Graphics context to paint on
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

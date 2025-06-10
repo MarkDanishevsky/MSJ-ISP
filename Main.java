@@ -46,7 +46,7 @@ public class Main {
 
         SplashScreen splash = new SplashScreen();
         frame.setContentPane(splash);
-        frame.setVisible(true); // Show the fully built SplashScreen
+        frame.setVisible(true); // Show the SplashScreen
 
         splash.displayImages("assets/MSJ_Logo.png", "assets/MSJ_Logo.png");
 
