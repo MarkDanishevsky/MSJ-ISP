@@ -90,7 +90,6 @@ public class Menu extends JPanel {
             });
         } else if (name.equals("Storyline")) {
             button.addActionListener(e -> {
-               System.out.println("here");
                 Storyline story = new Storyline(parentFrame);
                 parentFrame.setContentPane(story);
                 parentFrame.revalidate();
