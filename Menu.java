@@ -88,6 +88,13 @@ public class Menu extends JPanel {
                 parentFrame.setContentPane(instructions);
                 parentFrame.revalidate();
             });
+        } else if (name.equals("Storyline")) {
+            button.addActionListener(e -> {
+               System.out.println("here");
+                Storyline story = new Storyline(parentFrame);
+                parentFrame.setContentPane(story);
+                parentFrame.revalidate();
+            });
         } else if (name.equals("Credits")) {
             button.addActionListener(e -> {
                 Credits credits = new Credits(parentFrame);
