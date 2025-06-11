@@ -10,6 +10,7 @@ import java.io.IOException;
 public class MainGame extends JPanel {
     private int round = 0;
     private final int TOTAL_ROUNDS = 3;
+    static int readers = 200;
 
     private CardLayout cardLayout = new CardLayout();
     private JPanel screens = new JPanel(cardLayout);
@@ -58,7 +59,7 @@ public class MainGame extends JPanel {
         JPanel chooserScreen = new JPanel(new BorderLayout());
         chooserScreen.add(chooser, BorderLayout.CENTER);
         JButton submitButton = new JButton("Submit Headlines");
-        submitButton.setFont(Main.AthensClassic18);
+        submitButton.setFont(Main.AthensClassic24);
         submitButton.addActionListener(e -> showResult());
         chooserScreen.add(submitButton, BorderLayout.SOUTH);
 
