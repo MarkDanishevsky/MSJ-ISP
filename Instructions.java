@@ -17,6 +17,8 @@
  * Date: Friday May 30th, 2025
  * 
  * This is the menu instuctions page for our game.
+ * It displays a list of instructions and allows the user to navigate between them.
+ * The instructions are loaded from a CSV file and displayed as HTML labels.
  */
 import java.awt.*;
 import java.awt.event.*;
