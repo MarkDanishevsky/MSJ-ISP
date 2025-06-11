@@ -123,6 +123,7 @@ public class Minigame extends JPanel {
      * Initializes and configures the title label at the top of the panel.
      */
     private void initHeader() {
+        // for later use
         titleLabel = new JLabel("", SwingConstants.CENTER);
         titleLabel.setFont(TITLE_FONT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(187, 0, 25, 0));
@@ -138,6 +139,7 @@ public class Minigame extends JPanel {
         gridPanel.setOpaque(false);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, -20, 100));
 
+        // for later use
         headlineLabel0 = new JLabel("", SwingConstants.CENTER);
         headlineLabel1 = new JLabel("", SwingConstants.CENTER);
         headlineLabel2 = new JLabel("", SwingConstants.CENTER);

@@ -1,3 +1,25 @@
+/*
+ *  +-------------+
+ *  | \      M    | \
+ *  |   \         |   \
+ *  |    +--------------+
+ *  |    |       |      |
+ *  | S  |       |      |
+ *  |    |      J|      |
+ *  + - -| - - - -      |
+ *   \   |         \    |
+ *     \ |           \  |
+ *       +--------------+
+ * 
+ * MSJ Development Inc. (2025)
+ * ISP
+ * Client: Ms. Krasteva (ICS4U1, S2)
+ * Date: Tuesday June 3rd, 2025
+ * 
+ * This is the custom slider class for our game.
+ * It loads a custom pointer image and displays it on the slider thumb.
+ */
+
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.*;
@@ -6,8 +28,18 @@ import java.io.*;
 import javax.imageio.ImageIO;
 
 class CustomSlider extends BasicSliderUI {
+
+    /**
+     * The custom pointer image used to draw the slider thumb.
+     */
     private Image pointerImage;
 
+    /**
+     * Constructs a CustomSlider UI for the specified JSlider.
+     * Attempts to load and scale the custom pointer image.
+     *
+     * @param slider the JSlider this UI is associated with
+     */
     public CustomSlider(JSlider slider) {
         super(slider);
         try {
@@ -15,10 +47,16 @@ class CustomSlider extends BasicSliderUI {
             pointerImage = raw.getScaledInstance(8 * 3, 10 * 3, Image.SCALE_SMOOTH); // Adjust size as needed
             System.out.println("Custom pointer loaded successfully.");
         } catch (IOException e) {
-            System.err.println("Error loading pointer.jpg: " + e.getMessage());
+            System.err.println("Error loading pointer.png: " + e.getMessage());
         }
     }
 
+    /**
+     * Paints the slider thumb using the custom pointer image if available.
+     * If the image is not loaded, falls back to the default thumb painting.
+     *
+     * @param g the Graphics context to paint on
+     */
     @Override
     public void paintThumb(Graphics g) {
         if (pointerImage != null) {

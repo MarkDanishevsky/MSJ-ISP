@@ -26,52 +26,18 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class Leaderboard extends JPanel {
     private static final Font FONT = Main.AthensClassic18;
     private static final int MAX_ENTRIES = 8;
     private static final int VERTICAL_GAP = 33; // adjust spacing here
     private BufferedImage backgroundImage;
-    private final List<Entry> entries;
+    private final ArrayList<Entry> entries;
 
     public Leaderboard(JFrame parentFrame) {
         setLayout(new BorderLayout());
 
-        // --- Search Bar at top -----------------------------------------------
-        JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        JTextField searchField = new JTextField(20);
-        searchField.setFont(FONT);
-        JButton searchButton = new JButton("Search");
-        searchButton.setFont(FONT);
-
-        // individual listener for Search
-        searchButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String query = searchField.getText();
-                for (Entry en : entries) {
-                    if (en.name.equals(query)) {
-                        JOptionPane.showMessageDialog(
-                            Leaderboard.this,
-                            en.name + "'s score: " + en.score,
-                            "Search Result",
-                            JOptionPane.INFORMATION_MESSAGE
-                        );
-                        return;
-                    }
-                }
-                JOptionPane.showMessageDialog(
-                    Leaderboard.this,
-                    "User not found.",
-                    "Search Result",
-                    JOptionPane.WARNING_MESSAGE
-                );
-            }
-        });
-
-        searchPanel.add(new JLabel("Find user:"));
-        searchPanel.add(searchField);
-        searchPanel.add(searchButton);
 
         try {
             backgroundImage = ImageIO.read(new File("assets/table_background.png"));
@@ -90,23 +56,22 @@ public class Leaderboard extends JPanel {
 
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(77, 35, 0, 50));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(140, 35, 0, 50));
         headerPanel.add(leftHeading, BorderLayout.WEST);
         headerPanel.add(title, BorderLayout.CENTER);
 
-        // --- Load and display top entries ------------------------------------
         entries = loadEntries("assets/scores.csv");
-        selectionSortDescending(entries);
+        sortData(entries);
 
         JPanel listPanel = new JPanel();
         listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
         listPanel.setOpaque(false);
-        listPanel.setBorder(BorderFactory.createEmptyBorder(45, 50, 30, 50));
+        listPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 30, 50));
 
         int count = Math.min(entries.size(), MAX_ENTRIES);
         for (int i = 0; i < count; i++) {
             Entry e = entries.get(i);
-            JLabel label = new JLabel(String.format("%13d. %-30d  %s", i+1, e.score, e.name));
+            JLabel label = new JLabel(String.format("%10d.     %-38d  %s", i+1, e.score, e.name));
             label.setFont(Main.AthensClassic26);
             label.setForeground(Color.BLACK);
             listPanel.add(label);
@@ -119,7 +84,6 @@ public class Leaderboard extends JPanel {
         scrollPane.setBorder(null);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        // --- Bottom buttons --------------------------------------------------
         JButton back = new JButton("Back to Menu");
         back.setFont(FONT);
         back.addActionListener(new ActionListener() {
@@ -144,7 +108,6 @@ public class Leaderboard extends JPanel {
                 );
                 if (choice == JOptionPane.YES_OPTION) {
                     try (PrintWriter pw = new PrintWriter(new FileWriter("assets/scores.csv"))) {
-                        // truncate
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(
                             Leaderboard.this,
@@ -160,9 +123,45 @@ public class Leaderboard extends JPanel {
             }
         });
 
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        btnPanel.add(back);
-        btnPanel.add(clear);
+        JTextField searchField = new JTextField(20);
+        searchField.setFont(FONT);
+        JButton searchButton = new JButton("Search");
+        searchButton.setFont(FONT);
+
+        // individual listener for Search
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String query = searchField.getText();
+                for (Entry en : entries) {
+                    if (en.name.equals(query)) {
+                        JOptionPane.showMessageDialog(
+                                Leaderboard.this,
+                                en.name + "'s score: " + en.score,
+                                "Search Result",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                }
+                JOptionPane.showMessageDialog(
+                        Leaderboard.this,
+                        "Worker not found.",
+                        "Search Result",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        });
+
+        JLabel findUser = new JLabel("Find Worker:");
+        findUser.setForeground(Color.WHITE);
+        findUser.setFont(Main.AthensClassic24);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.add(back);
+        buttonPanel.add(clear);
+        buttonPanel.add(findUser);
+        buttonPanel.add(searchField);
+        buttonPanel.add(searchButton);
+        buttonPanel.setBackground(new Color(0, 0, 0, 0));
 
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setOpaque(false);
@@ -171,9 +170,8 @@ public class Leaderboard extends JPanel {
 
         // add to main layout
         setLayout(new BorderLayout());
-        add(searchPanel,  BorderLayout.NORTH);
         add(contentPanel, BorderLayout.CENTER);
-        add(btnPanel,     BorderLayout.SOUTH);
+        add(buttonPanel,     BorderLayout.SOUTH);
     }
 
     @Override
@@ -184,8 +182,8 @@ public class Leaderboard extends JPanel {
         }
     }
 
-    private List<Entry> loadEntries(String filePath) {
-        List<Entry> list = new ArrayList<>();
+    private ArrayList<Entry> loadEntries(String filePath) {
+        ArrayList<Entry> list = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -195,18 +193,13 @@ public class Leaderboard extends JPanel {
                     list.add(new Entry(parts[0].trim(), Integer.parseInt(parts[1].trim())));
                 }
             }
-        } catch (IOException | NumberFormatException ex) {
-            JOptionPane.showMessageDialog(
-                this,
-                "Error reading scores: " + ex.getMessage(),
-                "File Error",
-                JOptionPane.ERROR_MESSAGE
-            );
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return list;
     }
 
-    private void selectionSortDescending(List<Entry> list) {
+    private void sortData(ArrayList<Entry> list) {
         for (int i = 0; i < list.size() - 1; i++) {
             int maxIdx = i;
             for (int j = i + 1; j < list.size(); j++) {
@@ -217,15 +210,6 @@ public class Leaderboard extends JPanel {
             Entry tmp = list.get(i);
             list.set(i, list.get(maxIdx));
             list.set(maxIdx, tmp);
-        }
-    }
-
-    private static class Entry {
-        final String name;
-        final int score;
-        Entry(String name, int score) {
-            this.name = name;
-            this.score = score;
         }
     }
 }
