@@ -45,6 +45,7 @@ public class HeadlineChooser extends JPanel {
     private final ButtonGroup group = new ButtonGroup();
     private final JPanel previewPanel = new JPanel();
     private final JLabel pageLabel = new JLabel();
+    private final JLabel readersLabel = new JLabel();
 
     public HeadlineChooser() {
         ImageIcon unselectedIcon = new ImageIcon("assets/bird/pixil-frame-0.png");
@@ -147,6 +148,16 @@ public class HeadlineChooser extends JPanel {
 
         updateLeftPanel();
         updatePreview();
+
+        // Readers label setup
+        readersLabel.setBounds(800, 670, 160, 30);
+        readersLabel.setFont(Main.AthensClassic24);
+        readersLabel.setOpaque(true);
+        readersLabel.setBackground(Color.WHITE);
+        readersLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        readersLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        readersLabel.setText("Readers: " + MainGame.readers);
+        add(readersLabel);
     }
 
     private void updateLeftPanel() {
@@ -200,6 +211,10 @@ public class HeadlineChooser extends JPanel {
             if (i < selectedHeadlines.size()) {
                 JLabel label = new JLabel(selectedHeadlines.get(i));
                 label.setFont(Main.AthensClassic24);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setVerticalAlignment(SwingConstants.CENTER);
+                label.setHorizontalTextPosition(SwingConstants.CENTER);
+                label.setVerticalTextPosition(SwingConstants.CENTER);
                 rect.add(label, BorderLayout.CENTER);
             }
 
@@ -252,5 +267,9 @@ public class HeadlineChooser extends JPanel {
         frame.setSize(1000, 500);
         frame.setContentPane(new HeadlineChooser());
         frame.setVisible(true);
+    }
+
+    public void updateReadersCount() {
+        readersLabel.setText("Readers: " + MainGame.readers);
     }
 }
