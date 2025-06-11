@@ -138,6 +138,17 @@ public class Minigame extends JPanel {
         gridPanel.setOpaque(false);
         gridPanel.setBorder(BorderFactory.createEmptyBorder(0, 100, -20, 100));
 
+        headlineLabel0 = new JLabel("", SwingConstants.CENTER);
+        headlineLabel1 = new JLabel("", SwingConstants.CENTER);
+        headlineLabel2 = new JLabel("", SwingConstants.CENTER);
+        headlineLabel0.setFont(HEADLINE_FONT);
+        headlineLabel1.setFont(HEADLINE_FONT);
+        headlineLabel2.setFont(HEADLINE_FONT);
+
+        gridPanel.add(headlineLabel0);
+        gridPanel.add(headlineLabel1);
+        gridPanel.add(headlineLabel2);
+
         JSlider slider1 = createThreeChoiceSlider();
         JSlider slider2 = createThreeChoiceSlider();
         JSlider slider3 = createThreeChoiceSlider();
