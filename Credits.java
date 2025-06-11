@@ -19,9 +19,9 @@
  * This is the credits page for our game.
  */
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import javax.swing.*;
 
 public class Credits extends JPanel {
 
@@ -38,7 +38,7 @@ public class Credits extends JPanel {
             + "</div></html>",
             SwingConstants.CENTER
         );
-        instructionsLabel.setFont(Main.AthensClassic18);
+        instructionsLabel.setFont(Main.AthensClassic30);
         add(instructionsLabel, BorderLayout.CENTER);
 
         JButton backButton = new JButton("Back to Menu");
