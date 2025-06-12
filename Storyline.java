@@ -28,6 +28,7 @@ import java.awt.event.ActionListener;
 
 public class Storyline extends JPanel {
 
+    // Images used in the storyline
     private Image office;
     private Image winston;
     private Image AIwinston;
@@ -41,6 +42,7 @@ public class Storyline extends JPanel {
     private Image aspeak;
     private Image aizoom;
 
+    // Character positions
     private int wx;
     private int wy;
     private int mx;
@@ -48,6 +50,7 @@ public class Storyline extends JPanel {
     private int ax;
     private int ay;
 
+    // State flags
     private boolean aimode;
     private boolean showEyeZoom;
     private boolean speaking;
@@ -56,8 +59,8 @@ public class Storyline extends JPanel {
     private boolean mspeaking;
     private boolean isAnimating;
     private boolean aiFocus;
-    private int eyeZoomDelay;
 
+    // Story states
     private static final int STATE_WINSTON_AT_DESK = 0;
     private static final int STATE_WINSTON_FINAL_WORDS = 1;
     private static final int STATE_WINSTON_LEAVE = 2;
@@ -74,11 +77,16 @@ public class Storyline extends JPanel {
 
     private int currentState = STATE_WINSTON_AT_DESK;
 
+    // UI components
     private Scanner s;
     private JButton nextButton;
     private JButton menuButton;
     private Timer animationTimer;
 
+    /**
+     * Constructs the Storyline panel.
+     * @param parentFrame The parent JFrame for navigation
+     */
     public Storyline(JFrame parentFrame) {
         setLayout(new BorderLayout());
         s = new Scanner(System.in);
@@ -102,7 +110,6 @@ public class Storyline extends JPanel {
         wspeaking = false;
         aspeaking = false;
         mspeaking = false;
-        eyeZoomDelay = 0;
 
         wx = 250;
         wy = 360;
@@ -232,6 +239,9 @@ public class Storyline extends JPanel {
         });
     }
 
+    /**
+     * Advances the story to the next state.
+     */
     private void advanceStory() {
         nextButton.setEnabled(false); // Disable button during animation
         isAnimating = true;
@@ -243,6 +253,10 @@ public class Storyline extends JPanel {
         }
     }
 
+    /**
+     * Paints the storyline components.
+     * @param g The Graphics object to draw on
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
