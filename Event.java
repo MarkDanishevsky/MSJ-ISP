@@ -49,4 +49,12 @@ public class Event {
         this.factualStatement = factualStatement;
         this.headlineOptions = headlineOptions;
     }
+
+    public void used() {
+        used = false;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
 }

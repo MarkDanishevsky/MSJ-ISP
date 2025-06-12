@@ -25,18 +25,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 public class HeadlineChooser extends JPanel {
     private Image backgroundImage = new ImageIcon("assets/maingame_background.png").getImage();
     private int selectedPreviewIndex = -1;
     String[] dates = {"21st", "22nd", "23rd"};
-    int dateNum = 0;
-
-    Event[] events = loadEventsFromCSV("assets/headlines.csv");
 
     final ArrayList<String> selectedHeadlines = new ArrayList<>();
     private int currentIndex = 0;
@@ -47,8 +40,9 @@ public class HeadlineChooser extends JPanel {
     private final JPanel previewPanel = new JPanel();
     private final JLabel pageLabel = new JLabel();
     private final JLabel readersLabel = new JLabel();
+    private final JLabel previewStatus = new JLabel();
 
-    public HeadlineChooser() {
+    public HeadlineChooser(Event[] eventsToBeUsed, int dateNum) {
         ImageIcon unselectedIcon = new ImageIcon("assets/bird/pixil-frame-0.png");
         ImageIcon selectedIcon = new ImageIcon("assets/bird/pixil-frame-5.png");
         JLabel title = new JLabel("The Oceania Times", SwingConstants.CENTER);
@@ -71,6 +65,11 @@ public class HeadlineChooser extends JPanel {
         factLabel.setFont(Main.AthensClassic24);
         add(factLabel);
 
+        JLabel headlineOptionsLabel = new JLabel("Possible Headline Options");
+        headlineOptionsLabel.setBounds(30, 190, 400, 30);
+        headlineOptionsLabel.setFont(Main.AthensClassic24);
+        add(headlineOptionsLabel);
+
         // Headline options
         for (int i = 0; i < 3; i++) {
             options[i] = new JRadioButton();
@@ -88,12 +87,24 @@ public class HeadlineChooser extends JPanel {
                 while (selectedHeadlines.size() <= currentIndex) {
                     selectedHeadlines.add("");
                 }
-                selectedHeadlines.set(currentIndex, events[currentIndex].headlineOptions[finalI].content);
+                selectedHeadlines.set(currentIndex, eventsToBeUsed[currentIndex].headlineOptions[finalI].content);
+                for (int j = 0; j < 3; j++) {
+                    options[j].setForeground(j == finalI ? new Color(140, 27, 50) : Color.BLACK);
+                }
                 updatePreview();
             });
             group.add(options[i]);
             add(options[i]);
         }
+
+        JLabel previewTitle = new JLabel("Newspaper Render");
+        previewTitle.setBounds(450, 145, 500, 30);
+        previewTitle.setFont(Main.AthensClassic24);
+        add(previewTitle);
+
+        previewStatus.setBounds(450, 190, 500, 20);
+        previewStatus.setFont(Main.AthensClassic18);
+        add(previewStatus);
 
         // Arrows
         JButton leftArrow = new JButton("<");
@@ -102,20 +113,18 @@ public class HeadlineChooser extends JPanel {
         leftArrow.addActionListener(e -> {
             if (currentIndex > 0) {
                 currentIndex--;
-                updateLeftPanel();
+                updateLeftPanel(eventsToBeUsed);
             }
         });
         add(leftArrow);
-
-        
 
         JButton rightArrow = new JButton(">");
         rightArrow.setBounds(327, 460, 50, 30);
         rightArrow.setFont(Main.AthensClassic24);
         rightArrow.addActionListener(e -> {
-            if (currentIndex < events.length - 1) {
+            if (currentIndex < eventsToBeUsed.length - 1) {
                 currentIndex++;
-                updateLeftPanel();
+                updateLeftPanel(eventsToBeUsed);
             }
         });
         add(rightArrow);
@@ -131,8 +140,21 @@ public class HeadlineChooser extends JPanel {
         previewPanel.setOpaque(false);
         add(previewPanel);
 
-        updateLeftPanel();
+        updateLeftPanel(eventsToBeUsed);
         updatePreview();
+        // Mark the text red immediately when selected
+        if (currentIndex < selectedHeadlines.size()) {
+            String selected = selectedHeadlines.get(currentIndex);
+            if (selected != null && !selected.isEmpty()) {
+                for (int i = 0; i < 3; i++) {
+                    if (eventsToBeUsed[currentIndex].headlineOptions[i].content.equals(selected)) {
+                        options[i].setForeground(new Color(140, 27, 50));
+                    } else {
+                        options[i].setForeground(Color.BLACK);
+                    }
+                }
+            }
+        }
 
         // Readers label setup
         readersLabel.setBounds(800, 620, 160, 30);
@@ -145,14 +167,14 @@ public class HeadlineChooser extends JPanel {
         add(readersLabel);
     }
 
-    private void updateLeftPanel() {
-        factLabel.setText(events[currentIndex].factualStatement);
+    private void updateLeftPanel(Event[] eventsToBeUsed) {
+        factLabel.setText("FACT: " + eventsToBeUsed[currentIndex].factualStatement);
         group.clearSelection();
         // Ensure radio buttons are reset and redrawn
         for (int i = 0; i < 3; i++) {
             options[i].setSelected(false);
             options[i].setForeground(Color.BLACK);
-            options[i].setText("<html><body style='width:360px'>" + events[currentIndex].headlineOptions[i].content + "</body></html>");
+            options[i].setText("<html><body style='width:360px'>" + eventsToBeUsed[currentIndex].headlineOptions[i].content + "</body></html>");
             options[i].revalidate();
             options[i].repaint();
         }
@@ -160,7 +182,7 @@ public class HeadlineChooser extends JPanel {
             String selected = selectedHeadlines.get(currentIndex);
             if (selected != null && !selected.isEmpty()) {
                 for (int i = 0; i < 3; i++) {
-                    if (events[currentIndex].headlineOptions[i].content.equals(selected)) {
+                    if (eventsToBeUsed[currentIndex].headlineOptions[i].content.equals(selected)) {
                         options[i].setSelected(true);
                         options[i].setForeground(new Color(140, 27, 50));
                     } else {
@@ -170,7 +192,7 @@ public class HeadlineChooser extends JPanel {
             }
         }
         
-        pageLabel.setText("Page " + (currentIndex + 1) + " of " + events.length);
+        pageLabel.setText("Page " + (currentIndex + 1) + " of 4");
     }
 
     private void updatePreview() {
@@ -213,63 +235,38 @@ public class HeadlineChooser extends JPanel {
 
             previewPanel.add(rect);
         }
+        previewStatus.setText(selectedPreviewIndex >= 0 ? "Headline article outlined" : "Select a headline article");
         previewPanel.repaint();
         previewPanel.revalidate();
-    }
-
-    private Event[] loadEventsFromCSV(String filename) {
-        ArrayList<Event> eventList = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                ArrayList<String> fields = new ArrayList<>();
-                StringBuilder sb = new StringBuilder();
-                boolean inQuotes = false;
-                for (char c : line.toCharArray()) {
-                    if (c == '\"') {
-                        inQuotes = !inQuotes;
-                    } else if (c == ',' && !inQuotes) {
-                        fields.add(sb.toString().trim());
-                        sb.setLength(0);
-                    } else {
-                        sb.append(c);
-                    }
-                }
-                fields.add(sb.toString().trim());
-
-                if (fields.size() >= 7) {
-                    String fact = fields.get(0);
-                    Headline[] headlines = {
-                        new Headline(fields.get(1), Integer.parseInt(fields.get(2))),
-                        new Headline(fields.get(3), Integer.parseInt(fields.get(4))),
-                        new Headline(fields.get(5), Integer.parseInt(fields.get(6)))
-                    };
-                    eventList.add(new Event(fact, headlines));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return eventList.toArray(new Event[0]);
-    }
-
-    // To run standalone for testing:
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Headline Chooser");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 500);
-        frame.setContentPane(new HeadlineChooser());
-        frame.setVisible(true);
     }
 
     public void updateReadersCount() {
         readersLabel.setText("Readers: " + MainGame.readers);
     }
 
-    public void addSubmitLogicTo(JButton submitButton) {
+    public void addSubmitLogicTo(JButton submitButton, Event[] eventsToBeUsed) {
         submitButton.addActionListener(e -> {
-            if (selectedHeadlines.size() < events.length || selectedHeadlines.contains("") || selectedPreviewIndex < 0) {
-                JOptionPane.showMessageDialog(this, "Please select a headline for all events and choose a main article.", "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
+            // Ensure that selectedHeadlines has exactly 4 non-empty, non-null entries
+            if (selectedHeadlines.size() < 4) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select one headline for each of the 4 events.",
+                    "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            for (int i = 0; i < 4; i++) {
+                if (selectedHeadlines.get(i) == null || selectedHeadlines.get(i).isEmpty()) {
+                    JOptionPane.showMessageDialog(this,
+                        "Please select one headline for each of the 4 events.",
+                        "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+
+            if (selectedPreviewIndex < 0 || selectedPreviewIndex >= selectedHeadlines.size()) {
+                JOptionPane.showMessageDialog(this,
+                    "Please select a main article.",
+                    "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 

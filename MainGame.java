@@ -4,21 +4,28 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class MainGame extends JPanel {
     private int round = 0;
-    private final int TOTAL_ROUNDS = 3;
-    static int readers = 200;
+    private final int TOTAL_ROUNDS = 4;
+    static int readers = 100;
+    final static Event[] events = loadEventsFromCSV("assets/headlines.csv");
+
+    static int change = 0;
 
     private CardLayout cardLayout = new CardLayout();
     private JPanel screens = new JPanel(cardLayout);
 
-    private JLabel introLabel = new JLabel("<html><center>Welcome to the Headline Influence Game!<br>Choose headlines wisely to boost your readership.</center></html>", SwingConstants.CENTER);
+    private JLabel introLabel = new JLabel("<html><center>Choose headlines wisely with the sole goal of boosting readership.</center></html>", SwingConstants.CENTER);
     private JButton startButton = new JButton("Start Game");
 
-    private HeadlineChooser chooser = new HeadlineChooser();
+    private HeadlineChooser chooser = new HeadlineChooser(getThreeEvents(), round);
     private IndicatorPanel indicatorPanel = new IndicatorPanel();
     private JButton nextButton = new JButton("Next");
 
@@ -32,6 +39,26 @@ public class MainGame extends JPanel {
         Main.frame.setVisible(true);
     }
 
+    private static Event[] getThreeEvents() {
+        ArrayList<Event> available = new ArrayList<>();
+        for (Event e : events) {
+            if (!e.isUsed()) {
+                available.add(e);
+            }
+        }
+
+        Collections.shuffle(available);
+
+        int count = Math.min(4, available.size());
+        Event[] selected = new Event[count];
+        for (int i = 0; i < count; i++) {
+            selected[i] = available.get(i);
+            selected[i].used();
+        }
+
+        return selected;
+    }
+
     public MainGame() {
         try {
             BufferedImage raw = ImageIO.read(new File("assets/loyalty_meter.png"));
@@ -43,7 +70,6 @@ public class MainGame extends JPanel {
         } catch (IOException ex) {
             System.out.println("No file assets/loyalty_meter.png");
         }
-
 
         setLayout(new BorderLayout());
 
@@ -70,7 +96,7 @@ public class MainGame extends JPanel {
         nextButton.addActionListener(e -> {
             round++;
             if (round < TOTAL_ROUNDS) {
-                chooser = new HeadlineChooser(); // reset chooser
+                chooser = new HeadlineChooser(getThreeEvents(), round); // reset chooser
                 screens.add(makeChooserScreen(), "chooser" + round);
                 showChooser();
             } else {
@@ -83,6 +109,15 @@ public class MainGame extends JPanel {
         JPanel endScreen = new JPanel(new BorderLayout());
         endLabel.setFont(Main.AthensClassic24);
         endScreen.add(endLabel, BorderLayout.CENTER);
+        // Add return to menu button
+        JButton returnButton = new JButton("Return to Menu");
+        returnButton.setFont(Main.AthensClassic18);
+        returnButton.addActionListener(e -> {
+            Menu menu = new Menu();
+            Main.frame.setContentPane(menu);
+            Main.frame.revalidate();
+        });
+        endScreen.add(returnButton, BorderLayout.SOUTH);
 
         // Add all screens
         screens.add(introScreen, "intro");
@@ -167,5 +202,41 @@ public class MainGame extends JPanel {
             g2.setColor(Color.BLACK);
             g2.drawLine(centerX, centerY, endX, endY);
         }
+    }
+
+    private static Event[] loadEventsFromCSV(String filename) {
+        ArrayList<Event> eventList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                ArrayList<String> fields = new ArrayList<>();
+                StringBuilder sb = new StringBuilder();
+                boolean inQuotes = false;
+                for (char c : line.toCharArray()) {
+                    if (c == '\"') {
+                        inQuotes = !inQuotes;
+                    } else if (c == ',' && !inQuotes) {
+                        fields.add(sb.toString().trim());
+                        sb.setLength(0);
+                    } else {
+                        sb.append(c);
+                    }
+                }
+                fields.add(sb.toString().trim());
+
+                if (fields.size() >= 7) {
+                    String fact = fields.get(0);
+                    Headline[] headlines = {
+                        new Headline(fields.get(1), Integer.parseInt(fields.get(2))),
+                        new Headline(fields.get(3), Integer.parseInt(fields.get(4))),
+                        new Headline(fields.get(5), Integer.parseInt(fields.get(6)))
+                    };
+                    eventList.add(new Event(fact, headlines));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return eventList.toArray(new Event[0]);
     }
 }
