@@ -52,14 +52,16 @@ public class HeadlineChooser extends JPanel {
         ImageIcon unselectedIcon = new ImageIcon("assets/bird/pixil-frame-0.png");
         ImageIcon selectedIcon = new ImageIcon("assets/bird/pixil-frame-5.png");
         JLabel title = new JLabel("The Oceania Times", SwingConstants.CENTER);
-        title.setFont(Main.AthensClassic30);
-        title.setBounds(450, 20, 500, 30);
+        title.setFont(Main.AthensClassic.deriveFont(45f));
+        title.setBounds(250, 40, 500, 30);
+        title.setHorizontalAlignment(SwingConstants.CENTER);
         add(title);
 
         JLabel date = new JLabel("June " + dates[dateNum] + ", 1984", SwingConstants.CENTER);
         dateNum++;
         date.setFont(Main.AthensClassic24);
-        date.setBounds(450, 50, 500, 20);
+        date.setBounds(250, 80, 500, 20);
+        date.setHorizontalAlignment(SwingConstants.CENTER);
         add(date);
 
         setLayout(null); // manual positioning
@@ -72,7 +74,8 @@ public class HeadlineChooser extends JPanel {
         // Headline options
         for (int i = 0; i < 3; i++) {
             options[i] = new JRadioButton();
-            options[i].setBounds(30, 220 + i * 40, 400, 30);
+            options[i].setVerticalAlignment(SwingConstants.TOP);
+            options[i].setBounds(30, 220 + i * 60, 400, 50);
             options[i].setFont(Main.AthensClassic24);
             options[i].setIcon(unselectedIcon);
             options[i].setSelectedIcon(selectedIcon);
@@ -123,29 +126,10 @@ public class HeadlineChooser extends JPanel {
         add(pageLabel);
 
         // Preview rectangles
-        previewPanel.setBounds(450, 120, 500, 400);
+        previewPanel.setBounds(450, 210, 500, 400);
         previewPanel.setLayout(null);
+        previewPanel.setOpaque(false);
         add(previewPanel);
-
-        // Submit button at bottom right
-        JButton submitButton = new JButton("Submit");
-        submitButton.setBounds(800, 430, 120, 30);
-        submitButton.setFont(Main.AthensClassic24);
-        submitButton.addActionListener(e -> {
-            
-            // Validation: all events have a headline, no empty, preview index valid
-            if (selectedHeadlines.size() < events.length || selectedHeadlines.contains("") || selectedPreviewIndex < 0) {
-                JOptionPane.showMessageDialog(this, "Please select a headline for all events and choose a main article.", "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-
-            System.out.println("Submitted Headlines:");
-            for (int i = 0; i < selectedHeadlines.size(); i++) {
-                System.out.println("Event " + (i + 1) + ": " + selectedHeadlines.get(i));
-            }
-            System.out.println("Chosen headline article: " + selectedHeadlines.get(selectedPreviewIndex));
-        });
-        add(submitButton);
 
         updateLeftPanel();
         updatePreview();
@@ -167,7 +151,8 @@ public class HeadlineChooser extends JPanel {
         // Ensure radio buttons are reset and redrawn
         for (int i = 0; i < 3; i++) {
             options[i].setSelected(false);
-            options[i].setText("<html><div style='width:360px;'>" + events[currentIndex].headlineOptions[i].content + "</div></html>");
+            options[i].setForeground(Color.BLACK);
+            options[i].setText("<html><body style='width:360px'>" + events[currentIndex].headlineOptions[i].content + "</body></html>");
             options[i].revalidate();
             options[i].repaint();
         }
@@ -177,6 +162,9 @@ public class HeadlineChooser extends JPanel {
                 for (int i = 0; i < 3; i++) {
                     if (events[currentIndex].headlineOptions[i].content.equals(selected)) {
                         options[i].setSelected(true);
+                        options[i].setForeground(new Color(140, 27, 50));
+                    } else {
+                        options[i].setForeground(Color.BLACK);
                     }
                 }
             }
@@ -191,7 +179,8 @@ public class HeadlineChooser extends JPanel {
             JPanel rect = new JPanel();
             rect.setLayout(new BorderLayout());
             rect.setBounds(20, i * 90 + 10, 460, 80);
-            rect.setBackground(Color.LIGHT_GRAY);
+            rect.setBackground(new Color(211, 211, 211, 180)); // light gray with some transparency
+            rect.setOpaque(false);
 
             final int index = i;
             rect.addMouseListener(new MouseAdapter() {
@@ -206,7 +195,7 @@ public class HeadlineChooser extends JPanel {
                 }
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    rect.setBackground(Color.LIGHT_GRAY);
+                    rect.setBackground(new Color(211, 211, 211, 180));
                 }
             });
 
@@ -275,6 +264,21 @@ public class HeadlineChooser extends JPanel {
 
     public void updateReadersCount() {
         readersLabel.setText("Readers: " + MainGame.readers);
+    }
+
+    public void addSubmitLogicTo(JButton submitButton) {
+        submitButton.addActionListener(e -> {
+            if (selectedHeadlines.size() < events.length || selectedHeadlines.contains("") || selectedPreviewIndex < 0) {
+                JOptionPane.showMessageDialog(this, "Please select a headline for all events and choose a main article.", "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            System.out.println("Submitted Headlines:");
+            for (int i = 0; i < selectedHeadlines.size(); i++) {
+                System.out.println("Event " + (i + 1) + ": " + selectedHeadlines.get(i));
+            }
+            System.out.println("Chosen headline article: " + selectedHeadlines.get(selectedPreviewIndex));
+        });
     }
 
     @Override

@@ -26,6 +26,7 @@ import java.io.IOException;
 import javax.swing.*;
 
 public class Main {
+    static Font AthensClassic;
     static Font AthensClassic24;
     static Font AthensClassic18;
     static Font AthensClassic26;
@@ -33,6 +34,7 @@ public class Main {
 
     static JFrame frame;
     public static void main(String[] args) throws FontFormatException, IOException {
+        AthensClassic = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf"));
         AthensClassic24 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(24f);
         AthensClassic18 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(18f);
         AthensClassic26 = Font.createFont(Font.TRUETYPE_FONT, new java.io.File("assets/fonts/AthensClassic.ttf")).deriveFont(26f);
