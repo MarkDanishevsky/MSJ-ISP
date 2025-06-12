@@ -39,6 +39,7 @@ public class Storyline extends JPanel {
     private Image wspeak;
     private Image mspeak;
     private Image aspeak;
+    private Image aizoom;
 
     private int wx;
     private int wy;
@@ -54,6 +55,7 @@ public class Storyline extends JPanel {
     private boolean aspeaking;
     private boolean mspeaking;
     private boolean isAnimating;
+    private boolean aiFocus;
     private int eyeZoomDelay;
 
     private static final int STATE_WINSTON_AT_DESK = 0;
@@ -67,7 +69,8 @@ public class Storyline extends JPanel {
     private static final int STATE_AI_RETURN = 8;
     private static final int STATE_MEURSAULT_BACK = 9;
     private static final int STATE_AMPLE_WRONG = 10;
-    private static final int STATE_DONE = 11;
+    private static final int STATE_WINSTON_MIND = 11;
+    private static final int STATE_DONE = 12;
 
     private int currentState = STATE_WINSTON_AT_DESK;
 
@@ -90,6 +93,7 @@ public class Storyline extends JPanel {
         wspeak = new ImageIcon("assets/winston_speaking.png").getImage();
         aspeak = new ImageIcon("assets/ampleforth_speaking.png").getImage();
         mspeak = new ImageIcon("assets/meursault_speaking.png").getImage();
+        aizoom = new ImageIcon("assets/winstonAIzoom.png").getImage();
 
         aimode = false;
         showEyeZoom = false;
@@ -189,6 +193,12 @@ public class Storyline extends JPanel {
                         mspeaking = false;
                         nextButton.setEnabled(true);
                         break;
+
+                    case STATE_WINSTON_MIND:
+                        aiFocus = true;
+                        speaking = true;
+                        break;
+
                     case STATE_DONE:
                         parentFrame.setContentPane(new Menu());
                         parentFrame.revalidate();
@@ -247,6 +257,9 @@ public class Storyline extends JPanel {
         if (showEyeZoom) {
             g.drawImage(eyezoom, 0, 0, getWidth(), getHeight(), this);
         }
+        if (aiFocus) {
+            g.drawImage(aizoom, 0, 0, getWidth(), getHeight(), this);
+        }
         if (speaking) {
             g.drawImage(speech, 0, 0, getWidth(), getHeight(), this);
         }
@@ -283,6 +296,10 @@ public class Storyline extends JPanel {
         }
         if (currentState == STATE_AMPLE_WRONG ) {
             message = "But something’s wrong… he looks different!";
+        }
+        if (currentState == STATE_WINSTON_MIND ) {
+            message = "He's been replaced with an AI whose sole purpose is to ";
+            g.drawString("maximize readership!", 40, getHeight() - 40);
         }
         g.drawString(message, 40, getHeight() - 70);
     }
