@@ -67,11 +67,13 @@ public class Storyline extends JPanel {
     private static final int STATE_AI_RETURN = 8;
     private static final int STATE_MEURSAULT_BACK = 9;
     private static final int STATE_AMPLE_WRONG = 10;
+    private static final int STATE_DONE = 11;
 
     private int currentState = STATE_WINSTON_AT_DESK;
 
     private Scanner s;
     private JButton nextButton;
+    private JButton menuButton;
     private Timer animationTimer;
 
     public Storyline(JFrame parentFrame) {
@@ -125,7 +127,7 @@ public class Storyline extends JPanel {
                         speaking = false;
                         wspeaking = false;
                         wx -= 5;
-                        if (wx <= -300) {
+                        if (wx <= -400) {
                             currentState = STATE_EYE_ZOOM;
                         }
                         break;
@@ -187,31 +189,37 @@ public class Storyline extends JPanel {
                         mspeaking = false;
                         nextButton.setEnabled(true);
                         break;
+                    case STATE_DONE:
+                        parentFrame.setContentPane(new Menu());
+                        parentFrame.revalidate();
+                        break;
                 }
                 repaint();
             }
         });
 
         nextButton = new JButton("Next");
-        nextButton.setFont(Main.AthensClassic18);
-        nextButton.setBackground(new Color(70, 70, 70));
-        nextButton.setForeground(Color.WHITE);
-        nextButton.setFocusPainted(false);
-        nextButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-
+        menuButton = new JButton("Menu");
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 20, 10));
+        buttonPanel.add(nextButton);
+        buttonPanel.add(menuButton);
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBackground(new Color(0,0,0,0));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 50, 0));
+        add(buttonPanel, BorderLayout.SOUTH);
         nextButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 advanceStory();
             }
         });
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setOpaque(false);
-        buttonPanel.add(nextButton);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                parentFrame.setContentPane(new Menu());
+                parentFrame.revalidate();
+            }
+        });
     }
 
     private void advanceStory() {
@@ -254,5 +262,28 @@ public class Storyline extends JPanel {
         if (speaking) {
             g.drawImage(speech, 0, 0, getWidth(), getHeight(), this);
         }
+        g.setColor(Color.BLACK);
+        g.setFont(Main.AthensClassic30);
+        String message = "";
+        if (currentState == STATE_WINSTON_FINAL_WORDS) {
+            message = "I must be wary. There are microphones and cameras everywhere.";
+            g.drawString("I cannot let them discover my allegiance to the rebellion.", 40, getHeight() - 40);
+        }
+        if (currentState == STATE_AMPLEFORTH_QUESTION) {
+            message = "Where has Winston been? He hasn’t shown up in a few days.";
+        }
+        if (currentState == STATE_MEURSAULT_WHAT) {
+            message = "What if he’s…";
+        }
+        if (currentState == STATE_AMPLEFORTH_OHNO) {
+            message = "You don’t mean…";
+        }
+        if (currentState == STATE_MEURSAULT_BACK) {
+            message = "Oh! He’s back!";
+        }
+        if (currentState == STATE_AMPLE_WRONG ) {
+            message = "But something’s wrong… he looks different!";
+        }
+        g.drawString(message, 40, getHeight() - 70);
     }
 }
