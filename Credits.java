@@ -21,39 +21,25 @@
  * The panel also includes a button to navigate back to the main menu.
  */
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import javax.swing.*;
 
-public class Credits extends JPanel {
-
-    /**
-     * Constructs the Credits panel.
-     * 
-     * @param parentFrame the JFrame that holds this panel, used to switch views
-     */
+public class Credits extends InfoScreen {
     public Credits(JFrame parentFrame) {
-        setLayout(new BorderLayout());
+        super("assets/credits.txt", "assets/background.png");
 
-        JLabel instructionsLabel = new JLabel(
-                "<html><div style='text-align: center;'>"
-                        + "<b>Credits<b><br><br>"
-                        + "This game was made by MSJ Development Inc.<br>"
-                        + "Project Lead: Mark Danishevsky<br>"
-                        + "Members: Joseph Wang, Sebastian Wang<br><br>"
-                        + "Thank you to Ms. Krasteva for teaching the course."
-                        + "</div></html>",
-                SwingConstants.CENTER);
-        instructionsLabel.setFont(Main.AthensClassic30);
-        add(instructionsLabel, BorderLayout.CENTER);
-
+        // Create and configure the back button
         JButton backButton = new JButton("Back to Menu");
+        backButton.setFont(Main.AthensClassic24);
         backButton.addActionListener((ActionEvent e) -> {
-            parentFrame.setContentPane(new Menu()); // Switch back to the menu panel
+            parentFrame.setContentPane(new Menu());
             parentFrame.revalidate();
         });
 
+        // Wrap it in a panel and add to the SOUTH region
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setOpaque(false);
         buttonPanel.add(backButton);
         add(buttonPanel, BorderLayout.SOUTH);
     }
