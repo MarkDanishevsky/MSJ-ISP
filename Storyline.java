@@ -10,12 +10,12 @@
  *   \   |         \    |
  *     \ |           \  |
  *       +--------------+
- * 
+ *
  * MSJ Development Inc. (2025)
  * ISP
  * Client: Ms. Krasteva (ICS4U1, S2)
  * Date: Friday May 30th, 2025
- * 
+ *
  * This is the story level for our game.
  */
 
@@ -35,10 +35,13 @@ public class Storyline extends JPanel {
     private Image ampleforth;
     private Image computer;
     private Image eyezoom;
+    private Image speech;
+    private Image wspeak;
+    private Image mspeak;
+    private Image aspeak;
 
     private int wx;
     private int wy;
-
     private int mx;
     private int my;
     private int ax;
@@ -46,20 +49,32 @@ public class Storyline extends JPanel {
 
     private boolean aimode;
     private boolean showEyeZoom;
+    private boolean speaking;
+    private boolean wspeaking;
+    private boolean aspeaking;
+    private boolean mspeaking;
+    private boolean isAnimating;
+    private int eyeZoomDelay;
 
     private static final int STATE_WINSTON_AT_DESK = 0;
-    private static final int STATE_WINSTON_LEAVE = 1;
-    private static final int STATE_EYE_ZOOM = 2;
-    private static final int STATE_COLLEAGUES_IN = 3;
-    private static final int STATE_WINSTON_IN = 4;
-    private static final int STATE_COLLEAGUES_OUT = 5;
+    private static final int STATE_WINSTON_FINAL_WORDS = 1;
+    private static final int STATE_WINSTON_LEAVE = 2;
+    private static final int STATE_EYE_ZOOM = 3;
+    private static final int STATE_COLLEAGUES_IN = 4;
+    private static final int STATE_AMPLEFORTH_QUESTION = 5;
+    private static final int STATE_MEURSAULT_WHAT = 6;
+    private static final int STATE_AMPLEFORTH_OHNO = 7;
+    private static final int STATE_AI_RETURN = 8;
+    private static final int STATE_MEURSAULT_BACK = 9;
+    private static final int STATE_AMPLE_WRONG = 10;
+
     private int currentState = STATE_WINSTON_AT_DESK;
-    private int delayCounter = 0;
 
     private Scanner s;
+    private JButton nextButton;
+    private Timer animationTimer;
 
     public Storyline(JFrame parentFrame) {
-
         setLayout(new BorderLayout());
         s = new Scanner(System.in);
         office = new ImageIcon("assets/office.png").getImage();
@@ -69,8 +84,19 @@ public class Storyline extends JPanel {
         ampleforth = new ImageIcon("assets/ampleforth.png").getImage();
         computer = new ImageIcon("assets/computer.png").getImage();
         eyezoom = new ImageIcon("assets/eyezoom.png").getImage();
+        speech = new ImageIcon("assets/speech_box.png").getImage();
+        wspeak = new ImageIcon("assets/winston_speaking.png").getImage();
+        aspeak = new ImageIcon("assets/ampleforth_speaking.png").getImage();
+        mspeak = new ImageIcon("assets/meursault_speaking.png").getImage();
+
         aimode = false;
         showEyeZoom = false;
+        isAnimating = false;
+        speaking = false;
+        wspeaking = false;
+        aspeaking = false;
+        mspeaking = false;
+        eyeZoomDelay = 0;
 
         wx = 250;
         wy = 360;
@@ -79,78 +105,124 @@ public class Storyline extends JPanel {
         ax = 1100;
         ay = 340;
 
-        Timer masterTimer = new Timer(16, new ActionListener() {
+        animationTimer = new Timer(16, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!isAnimating) return;
+
                 switch (currentState) {
                     case STATE_WINSTON_AT_DESK:
-                        wx = 250;  // Set Winston at desk
-                        wy = 360;
-                        if (delayCounter++ >= 30) {
-                            currentState = STATE_WINSTON_LEAVE;
-                            delayCounter = 0;
-                        }
+
+                        break;
+
+                    case STATE_WINSTON_FINAL_WORDS:
+                        speaking = true;
+                        wspeaking = true;
+                        nextButton.setEnabled(true);
                         break;
 
                     case STATE_WINSTON_LEAVE:
+                        speaking = false;
+                        wspeaking = false;
                         wx -= 5;
                         if (wx <= -300) {
-                            showEyeZoom = true;
                             currentState = STATE_EYE_ZOOM;
-                            delayCounter = 0;
                         }
                         break;
 
                     case STATE_EYE_ZOOM:
-                        if (delayCounter++ >= 100) {
-                            showEyeZoom = false;
-                            delayCounter = 0;
-                            currentState = STATE_COLLEAGUES_IN;
-                        }
+                        showEyeZoom = true;
+                        nextButton.setEnabled(true);
                         break;
 
                     case STATE_COLLEAGUES_IN:
+                        showEyeZoom = false;
                         mx -= 3;
                         ax -= 3;
-                        if (ax <= 700) {
-                            aimode = true;
-                            wx = 1300;
-                            currentState = STATE_WINSTON_IN;
+                        if (ax <= 800) {
+                            mx += 3;
+                            ax += 3;
+                            nextButton.setEnabled(true);
                         }
                         break;
 
-                    case STATE_WINSTON_IN:
-                        wx -= 3;
+                    case STATE_AMPLEFORTH_QUESTION:
+                        speaking = true;
+                        aspeaking = true;
+                        nextButton.setEnabled(true);
+                        break;
+
+                    case STATE_MEURSAULT_WHAT:
+                        aspeaking = false;
+                        mspeaking = true;
+                        nextButton.setEnabled(true);
+                        break;
+
+                    case STATE_AMPLEFORTH_OHNO:
+                        mspeaking = false;
+                        aspeaking = true;
+                        nextButton.setEnabled(true);
+                        wx = 1100;
+                        break;
+
+                    case STATE_AI_RETURN:
+                        aimode = true;
+                        aspeaking = false;
+                        speaking = false;
+                        wx -= 5;
                         if (wx <= 250) {
-                            delayCounter = 0;
-                            currentState = STATE_COLLEAGUES_OUT;
+                            wx = 250;
+                            nextButton.setEnabled(true);
                         }
                         break;
 
-                    case STATE_COLLEAGUES_OUT:
-                        if (delayCounter++ >= 45) {
-                            mx += 4;
-                            ax += 4;
-                            if (ax >= 1200) {
-                                ((Timer)e.getSource()).stop();
-                            }
-                        }
+                    case STATE_MEURSAULT_BACK:
+                        mspeaking = true;
+                        speaking = true;
+                        nextButton.setEnabled(true);
+                        break;
+
+                    case STATE_AMPLE_WRONG:
+                        aspeaking = true;
+                        mspeaking = false;
+                        nextButton.setEnabled(true);
                         break;
                 }
                 repaint();
             }
         });
-        masterTimer.start();
 
+        nextButton = new JButton("Next");
+        nextButton.setFont(Main.AthensClassic18);
+        nextButton.setBackground(new Color(70, 70, 70));
+        nextButton.setForeground(Color.WHITE);
+        nextButton.setFocusPainted(false);
+        nextButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        JLabel instructionsLabel = new JLabel(
-                "<html><div style='text-align: center;'>"
-                        + "Story",
-                SwingConstants.CENTER
-        );
-        instructionsLabel.setFont(Main.AthensClassic18);
-        add(instructionsLabel, BorderLayout.CENTER);
+        nextButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                advanceStory();
+            }
+        });
 
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(nextButton);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        
+    }
+
+    private void advanceStory() {
+        nextButton.setEnabled(false); // Disable button during animation
+        isAnimating = true;
+
+        currentState++;
+
+        if (!animationTimer.isRunning()) {
+            animationTimer.start();
+        }
     }
 
     @Override
@@ -166,6 +238,21 @@ public class Storyline extends JPanel {
         g.drawImage(computer, 0, 50, getWidth(), getHeight(), this);
         if (showEyeZoom) {
             g.drawImage(eyezoom, 0, 0, getWidth(), getHeight(), this);
+        }
+        if (speaking) {
+            g.drawImage(speech, 0, 0, getWidth(), getHeight(), this);
+        }
+        if (wspeaking) {
+            g.drawImage(wspeak, 0, 0, getWidth(), getHeight(), this);
+        }
+        if (aspeaking) {
+            g.drawImage(aspeak, 0, 0, getWidth(), getHeight(), this);
+        }
+        if (mspeaking) {
+            g.drawImage(mspeak, 0, 0, getWidth(), getHeight(), this);
+        }
+        if (speaking) {
+            g.drawImage(speech, 0, 0, getWidth(), getHeight(), this);
         }
     }
 }
