@@ -37,7 +37,7 @@ public class Instructions extends JPanel {
         setLayout(new BorderLayout());
 
         loadInstructions("assets/instructions/instructions.txt");
-        backgroundImage = new ImageIcon("assets/background.png").getImage();
+        backgroundImage = new ImageIcon("assets/instructions/instructions-bg.png").getImage();
 
         textLabel = new JLabel("", SwingConstants.CENTER);
         textLabel.setFont(Main.AthensClassic30);
@@ -127,7 +127,8 @@ public class Instructions extends JPanel {
 
     private void updateText() {
         String text = instructions.get(currentIndex);
-        textLabel.setText("<html><div style='text-align: center;'>" + text + "</div></html>");
+        textLabel.setText("<html><div style='text-align: center; padding-left: 50px; padding-right: 50px;'>" + text + "</div></html>");
+        textLabel.setForeground(Color.BLACK);
     }
 
     @Override
