@@ -31,6 +31,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class HeadlineChooser extends JPanel {
+    private Image backgroundImage = new ImageIcon("assets/maingame_background.png").getImage();
     private int selectedPreviewIndex = -1;
     String[] dates = {"21st", "22nd", "23rd"};
     int dateNum = 0;
@@ -64,14 +65,14 @@ public class HeadlineChooser extends JPanel {
         setLayout(null); // manual positioning
 
         // Fact Label
-        factLabel.setBounds(30, 60, 400, 40);
+        factLabel.setBounds(30, 150, 400, 40);
         factLabel.setFont(Main.AthensClassic24);
         add(factLabel);
 
         // Headline options
         for (int i = 0; i < 3; i++) {
             options[i] = new JRadioButton();
-            options[i].setBounds(30, 120 + i * 40, 400, 30);
+            options[i].setBounds(30, 220 + i * 40, 400, 30);
             options[i].setFont(Main.AthensClassic24);
             options[i].setIcon(unselectedIcon);
             options[i].setSelectedIcon(selectedIcon);
@@ -93,7 +94,7 @@ public class HeadlineChooser extends JPanel {
 
         // Arrows
         JButton leftArrow = new JButton("<");
-        leftArrow.setBounds(30, 260, 50, 30);
+        leftArrow.setBounds(30, 360, 50, 30);
         leftArrow.setFont(Main.AthensClassic24);
         leftArrow.addActionListener(e -> {
             if (currentIndex > 0) {
@@ -106,7 +107,7 @@ public class HeadlineChooser extends JPanel {
         
 
         JButton rightArrow = new JButton(">");
-        rightArrow.setBounds(327, 260, 50, 30);
+        rightArrow.setBounds(327, 360, 50, 30);
         rightArrow.setFont(Main.AthensClassic24);
         rightArrow.addActionListener(e -> {
             if (currentIndex < events.length - 1) {
@@ -116,7 +117,7 @@ public class HeadlineChooser extends JPanel {
         });
         add(rightArrow);
 
-        pageLabel.setBounds(130, 260, 150, 30);
+        pageLabel.setBounds(130, 360, 150, 30);
         pageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pageLabel.setFont(Main.AthensClassic24);
         add(pageLabel);
@@ -150,7 +151,7 @@ public class HeadlineChooser extends JPanel {
         updatePreview();
 
         // Readers label setup
-        readersLabel.setBounds(800, 670, 160, 30);
+        readersLabel.setBounds(800, 620, 160, 30);
         readersLabel.setFont(Main.AthensClassic24);
         readersLabel.setOpaque(true);
         readersLabel.setBackground(Color.WHITE);
@@ -163,17 +164,24 @@ public class HeadlineChooser extends JPanel {
     private void updateLeftPanel() {
         factLabel.setText(events[currentIndex].factualStatement);
         group.clearSelection();
+        // Ensure radio buttons are reset and redrawn
         for (int i = 0; i < 3; i++) {
-            options[i].setText(events[currentIndex].headlineOptions[i].content);
+            options[i].setSelected(false);
+            options[i].setText("<html><div style='width:360px;'>" + events[currentIndex].headlineOptions[i].content + "</div></html>");
+            options[i].revalidate();
+            options[i].repaint();
         }
         if (currentIndex < selectedHeadlines.size()) {
             String selected = selectedHeadlines.get(currentIndex);
-            for (int i = 0; i < 3; i++) {
-                if (events[currentIndex].headlineOptions[i].content.equals(selected)) {
-                    options[i].setSelected(true);
+            if (selected != null && !selected.isEmpty()) {
+                for (int i = 0; i < 3; i++) {
+                    if (events[currentIndex].headlineOptions[i].content.equals(selected)) {
+                        options[i].setSelected(true);
+                    }
                 }
             }
         }
+        
         pageLabel.setText("Page " + (currentIndex + 1) + " of " + events.length);
     }
 
@@ -211,10 +219,6 @@ public class HeadlineChooser extends JPanel {
             if (i < selectedHeadlines.size()) {
                 JLabel label = new JLabel(selectedHeadlines.get(i));
                 label.setFont(Main.AthensClassic24);
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                label.setVerticalAlignment(SwingConstants.CENTER);
-                label.setHorizontalTextPosition(SwingConstants.CENTER);
-                label.setVerticalTextPosition(SwingConstants.CENTER);
                 rect.add(label, BorderLayout.CENTER);
             }
 
@@ -271,5 +275,11 @@ public class HeadlineChooser extends JPanel {
 
     public void updateReadersCount() {
         readersLabel.setText("Readers: " + MainGame.readers);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }
