@@ -97,7 +97,7 @@ public class HeadlineChooser extends JPanel {
 
         // Arrows
         JButton leftArrow = new JButton("<");
-        leftArrow.setBounds(30, 360, 50, 30);
+        leftArrow.setBounds(30, 460, 50, 30);
         leftArrow.setFont(Main.AthensClassic24);
         leftArrow.addActionListener(e -> {
             if (currentIndex > 0) {
@@ -110,7 +110,7 @@ public class HeadlineChooser extends JPanel {
         
 
         JButton rightArrow = new JButton(">");
-        rightArrow.setBounds(327, 360, 50, 30);
+        rightArrow.setBounds(327, 460, 50, 30);
         rightArrow.setFont(Main.AthensClassic24);
         rightArrow.addActionListener(e -> {
             if (currentIndex < events.length - 1) {
@@ -120,7 +120,7 @@ public class HeadlineChooser extends JPanel {
         });
         add(rightArrow);
 
-        pageLabel.setBounds(130, 360, 150, 30);
+        pageLabel.setBounds(130, 460, 150, 30);
         pageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         pageLabel.setFont(Main.AthensClassic24);
         add(pageLabel);
