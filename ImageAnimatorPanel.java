@@ -20,6 +20,7 @@
  * It animates a sequence of images by loading them from disk and scaling them to a fixed size.
  * The animation is looped and displayed in a separate thread.
  */
+
 import javax.swing.*;
 import javax.imageio.ImageIO;
 import java.awt.*;

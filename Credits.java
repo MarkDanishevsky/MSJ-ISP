@@ -18,7 +18,7 @@
  * 
  * This is the credits page for our game.
  * It shows the project lead, team members, and a thank you note to the course instructor.
- * The panel also includes a button to navigate back to the main menu.
+ * It extends InfoScreen, loading its content from a text file and rendering a background image. 
  */
 
 import javax.swing.*;
@@ -26,6 +26,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class Credits extends InfoScreen {
+
+    /**
+     * Constructs the credits screen panel.
+     *
+     * @param parentFrame the main application window, used to switch views
+     */
     public Credits(JFrame parentFrame) {
         super("assets/credits.txt", "assets/background.png");
 
@@ -37,7 +43,7 @@ public class Credits extends InfoScreen {
             parentFrame.revalidate();
         });
 
-        // Wrap it in a panel and add to the SOUTH region
+        // Wrap the button in a transparent panel and add it to the bottom
         JPanel buttonPanel = new JPanel();
         buttonPanel.setOpaque(false);
         buttonPanel.add(backButton);
