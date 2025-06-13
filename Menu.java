@@ -23,8 +23,16 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * This class represents the main menu screen for the game.
+ * It displays clickable buttons for navigating to other sections such as Instructions, Storyline, Game, Minigame, Credits, and Leaderboard.
+ */
 public class Menu extends JPanel {
 
+    /**
+     * Constructs a new Menu panel.
+     * Loads and scales the background image, initializes button icons, and configures button actions and layout.
+     */
     public Menu() {
         ImageIcon originalIcon = new ImageIcon("assets/background.png");
         Image scaledImage = originalIcon.getImage().getScaledInstance(1024, 768, Image.SCALE_SMOOTH);
@@ -60,6 +68,17 @@ public class Menu extends JPanel {
         add(backgroundLabel);
     }
 
+    /**
+     * Creates and configures a custom JButton with the given label and icon, places it at the specified coordinates,
+     * and sets the button's action to switch to the appropriate panel depending on its name.
+     *
+     * @param name the label for the button and the name of the section it navigates to
+     * @param icon the default icon to use on the button
+     * @param x the horizontal position of the button
+     * @param y the vertical position of the button
+     * @param parentFrame the main application window used to switch content
+     * @return a customized JButton with hover and click functionality
+     */
     private JButton createCustomButton(String name, ImageIcon icon, int x, int y, JFrame parentFrame) {
         JButton button = new JButton(name, icon);
         button.setHorizontalTextPosition(SwingConstants.CENTER);

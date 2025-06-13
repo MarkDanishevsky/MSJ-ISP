@@ -42,23 +42,26 @@ import java.io.IOException;
 public class SplashScreen extends JPanel {
 
     /**
-     * Panel responsible for displaying a fade-in image.
+     * The panel responsible for handling a fade-in image effect during the splash screen.
      */
     private final FadeImagePanel imgPanel;
 
     /**
-     * Panel responsible for displaying an animated image sequence.
+     * The panel that displays a looping bird animation at the bottom of the splash screen.
      */
     private final ImageAnimatorPanel animationPanel;
 
     /**
-     * Constructs a {@code SplashScreen} panel with a center fade image
-     * and an animated graphic aligned at the bottom.
+     * Constructs the SplashScreen panel.
+     * Sets up the layout with a centered image that fades in and a looping bird animation at the bottom.
      */
     public SplashScreen() {
         setLayout(new BorderLayout());
 
         imgPanel = new FadeImagePanel();
+
+        JLabel bylineLabel = new JLabel("A game made by:", SwingConstants.CENTER);
+        bylineLabel.setFont(Main.AthensClassic30);
 
         String[] birdFrames = new String[10];
         for (int i = 0; i < 10; i++) {
@@ -67,9 +70,10 @@ public class SplashScreen extends JPanel {
 
         animationPanel = new ImageAnimatorPanel(birdFrames, 100);
 
-        JPanel imagesContainer = new JPanel(new GridLayout(1, 1));
+        JPanel imagesContainer = new JPanel(new BorderLayout());
         imagesContainer.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0));
-        imagesContainer.add(imgPanel);
+        imagesContainer.add(bylineLabel, BorderLayout.NORTH);
+        imagesContainer.add(imgPanel, BorderLayout.CENTER);
 
         JPanel animationWrapper = new JPanel(new BorderLayout());
         animationWrapper.setBorder(BorderFactory.createEmptyBorder(0, 0, 150, 0));
@@ -80,14 +84,11 @@ public class SplashScreen extends JPanel {
     }
 
     /**
-     * Displays two images by setting the first image for fade-in and starting the
-     * animation.
+     * Begins the splash screen sequence by loading the fade-in image and starting the animation.
      *
-     * @param path1 The path to the first image file to display with a fade-in
-     *              effect.
-     * @param path2 The path to the second image file (optional, may be used in fade
-     *              logic).
-     * @throws IOException if any image file fails to load.
+     * @param path1 the path to the main image to fade in
+     * @param path2 the path to a second image (currently unused, but may be part of fade logic)
+     * @throws IOException if either image cannot be loaded
      */
     public void displayImages(String path1, String path2) throws IOException {
         imgPanel.setImage(path1);

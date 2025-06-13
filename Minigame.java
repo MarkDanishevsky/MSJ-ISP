@@ -33,29 +33,101 @@ import javax.swing.border.Border;
  * and provides feedback on user selections.
  */
 public class Minigame extends JPanel {
+    /**
+     * Font used for the title label.
+     */
     private static final Font TITLE_FONT = Main.AthensClassic24;
+
+    /**
+     * Font used for headline labels.
+     */
     private static final Font HEADLINE_FONT = Main.AthensClassic24;
+
+    /**
+     * Font used for displaying results and feedback.
+     */
     private static final Font RESULT_FONT = Main.AthensClassic18;
 
+    /**
+     * Current value of the first slider.
+     */
     private int slider1Value = 1;
+
+    /**
+     * Current value of the second slider.
+     */
     private int slider2Value = 1;
+
+    /**
+     * Current value of the third slider.
+     */
     private int slider3Value = 1;
 
+    /**
+     * Label displaying the title or instructions at the top.
+     */
     private JLabel titleLabel;
+
+    /**
+     * Label displaying the first headline in the current scenario.
+     */
     private JLabel headlineLabel0;
+
+    /**
+     * Label displaying the second headline in the current scenario.
+     */
     private JLabel headlineLabel1;
+
+    /**
+     * Label displaying the third headline in the current scenario.
+     */
     private JLabel headlineLabel2;
+
+    /**
+     * Label showing result for the first slider.
+     */
     private JLabel slider1ResultLabel;
+
+    /**
+     * Label showing result for the second slider.
+     */
     private JLabel slider2ResultLabel;
+
+    /**
+     * Label showing result for the third slider.
+     */
     private JLabel slider3ResultLabel;
+
+    /**
+     * The submit button that the user clicks to confirm their selections.
+     */
     private JButton submitButton;
 
+    /**
+     * Background image drawn behind the minigame UI.
+     */
     private Image backgroundBackdrop;
+
+    /**
+     * Foreground background image layered above the backdrop.
+     */
     private Image backgroundImage;
 
+    /**
+     * List of all loaded scenarios; each scenario is an array of four strings:
+     * fact, headline0, headline1, headline2.
+     */
     private ArrayList<String[]> scenarios;
+
+    /**
+     * The index of the current round being played.
+     */
     private int currentRound = 0;
-    private ArrayList<Integer> correctAnswers = new ArrayList<>(Arrays.asList(0, 1, 2)); // bias, fair, fake
+
+    /**
+     * List holding the correct answers (as indices) for each category in the current scenario.
+     */
+    private ArrayList<Integer> correctAnswers = new ArrayList<>(Arrays.asList(0, 1, 2));
 
     /**
      * Constructs a new Minigame panel inside the given parent JFrame.
@@ -84,8 +156,7 @@ public class Minigame extends JPanel {
 
     /**
      * Loads all scenarios from the given CSV file.
-     * Each scenario consists of four lines representing the fact and three
-     * headlines in that order.
+     * Each scenario consists of four lines representing the fact and three headlines.
      *
      * @param filename the path to the CSV file containing scenario data
      */

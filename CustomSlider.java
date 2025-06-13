@@ -27,6 +27,11 @@ import java.awt.image.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 
+/**
+ * CustomSlider is a UI delegate that provides a custom thumb image
+ * for a JSlider component.
+ * It loads a pointer image from the assets and scales it for use as the thumb.
+ */
 class CustomSlider extends BasicSliderUI {
 
     /**
@@ -45,7 +50,6 @@ class CustomSlider extends BasicSliderUI {
         try {
             BufferedImage raw = ImageIO.read(new File("assets/pointer.png"));
             pointerImage = raw.getScaledInstance(8 * 3, 10 * 3, Image.SCALE_SMOOTH); // Adjust size as needed
-            System.out.println("Custom pointer loaded successfully.");
         } catch (IOException e) {
             System.err.println("Error loading pointer.png: " + e.getMessage());
         }

@@ -1,4 +1,3 @@
-
 /*
  *  +-------------+
  *  | \      M    | \
@@ -80,7 +79,7 @@ public class Leaderboard extends JPanel {
         title.setForeground(Color.BLACK);
 
         // Left heading label configuration
-        JLabel leftHeading = new JLabel("            Revenue", SwingConstants.LEFT);
+        JLabel leftHeading = new JLabel("            Readers", SwingConstants.LEFT);
         leftHeading.setFont(Main.AthensClassic26);
         leftHeading.setForeground(Color.BLACK);
 

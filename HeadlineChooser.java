@@ -27,21 +27,49 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 public class HeadlineChooser extends JPanel {
+    /** The background image used for the main gameplay screen. */
     private Image backgroundImage = new ImageIcon("assets/maingame_background.png").getImage();
-    private int selectedPreviewIndex = -1;
+
+    /** Index of the currently selected main headline article (0–3), or -1 if none is selected. */
+    static int selectedPreviewIndex = -1;
+
+    /** Array of date strings used to display different fictional publication days. */
     String[] dates = {"21st", "22nd", "23rd"};
 
-    final ArrayList<String> selectedHeadlines = new ArrayList<>();
+    /** Stores the player's selected headlines, one per news event. */
+    final ArrayList<Headline> selectedHeadlines = new ArrayList<>();
+
+    /** Tracks which news event the player is currently editing/selecting a headline for. */
     private int currentIndex = 0;
 
+    /** Label for displaying the factual statement of the current event. */
     private final JLabel factLabel = new JLabel();
+
+    /** Radio buttons for headline selection options. */
     private final JRadioButton[] options = new JRadioButton[3];
+
+    /** Groups radio buttons together so only one can be selected at a time. */
     private final ButtonGroup group = new ButtonGroup();
+
+    /** Panel that previews selected headlines and allows choosing the main article. */
     private final JPanel previewPanel = new JPanel();
+
+    /** Displays the current page number (e.g., Page 2 of 4). */
     private final JLabel pageLabel = new JLabel();
+
+    /** Displays the current number of readers in a bordered label. */
     private final JLabel readersLabel = new JLabel();
+
+    /** Shows a status message for the preview section ("Select a headline article", etc.). */
     private final JLabel previewStatus = new JLabel();
 
+    /**
+     * Constructs the headline chooser panel where players choose headlines for four events
+     * and designate one as the main article.
+     *
+     * @param eventsToBeUsed the list of 4 events to display
+     * @param dateNum the index of the current date to display
+     */
     public HeadlineChooser(Event[] eventsToBeUsed, int dateNum) {
         ImageIcon unselectedIcon = new ImageIcon("assets/bird/pixil-frame-0.png");
         ImageIcon selectedIcon = new ImageIcon("assets/bird/pixil-frame-5.png");
@@ -85,9 +113,9 @@ public class HeadlineChooser extends JPanel {
             int finalI = i;
             options[i].addActionListener(e -> {
                 while (selectedHeadlines.size() <= currentIndex) {
-                    selectedHeadlines.add("");
+                    selectedHeadlines.add(null);
                 }
-                selectedHeadlines.set(currentIndex, eventsToBeUsed[currentIndex].headlineOptions[finalI].content);
+                selectedHeadlines.set(currentIndex, eventsToBeUsed[currentIndex].headlineOptions[finalI]);
                 for (int j = 0; j < 3; j++) {
                     options[j].setForeground(j == finalI ? new Color(140, 27, 50) : Color.BLACK);
                 }
@@ -144,7 +172,7 @@ public class HeadlineChooser extends JPanel {
         updatePreview();
         // Mark the text red immediately when selected
         if (currentIndex < selectedHeadlines.size()) {
-            String selected = selectedHeadlines.get(currentIndex);
+            String selected = selectedHeadlines.get(currentIndex).content;
             if (selected != null && !selected.isEmpty()) {
                 for (int i = 0; i < 3; i++) {
                     if (eventsToBeUsed[currentIndex].headlineOptions[i].content.equals(selected)) {
@@ -167,6 +195,11 @@ public class HeadlineChooser extends JPanel {
         add(readersLabel);
     }
 
+    /**
+     * Updates the left panel with a new factual statement and its associated headline options.
+     *
+     * @param eventsToBeUsed the full list of events used in this session
+     */
     private void updateLeftPanel(Event[] eventsToBeUsed) {
         factLabel.setText("FACT: " + eventsToBeUsed[currentIndex].factualStatement);
         group.clearSelection();
@@ -179,7 +212,7 @@ public class HeadlineChooser extends JPanel {
             options[i].repaint();
         }
         if (currentIndex < selectedHeadlines.size()) {
-            String selected = selectedHeadlines.get(currentIndex);
+            String selected = selectedHeadlines.get(currentIndex).content;
             if (selected != null && !selected.isEmpty()) {
                 for (int i = 0; i < 3; i++) {
                     if (eventsToBeUsed[currentIndex].headlineOptions[i].content.equals(selected)) {
@@ -195,6 +228,10 @@ public class HeadlineChooser extends JPanel {
         pageLabel.setText("Page " + (currentIndex + 1) + " of 4");
     }
 
+    /**
+     * Redraws the right preview panel showing the four selected headlines.
+     * Allows the user to visually pick which one will be the main headline article.
+     */
     private void updatePreview() {
         previewPanel.removeAll();
         for (int i = 0; i < 4; i++) {
@@ -228,7 +265,7 @@ public class HeadlineChooser extends JPanel {
             }
 
             if (i < selectedHeadlines.size()) {
-                JLabel label = new JLabel(selectedHeadlines.get(i));
+                JLabel label = new JLabel(selectedHeadlines.get(i).content);
                 label.setFont(Main.AthensClassic24);
                 rect.add(label, BorderLayout.CENTER);
             }
@@ -240,10 +277,19 @@ public class HeadlineChooser extends JPanel {
         previewPanel.revalidate();
     }
 
+    /**
+     * Updates the reader count label at the bottom of the screen.
+     */
     public void updateReadersCount() {
         readersLabel.setText("Readers: " + MainGame.readers);
     }
 
+    /**
+     * Attaches logic to the submit button ensuring that all four headlines and one main article are selected.
+     *
+     * @param submitButton the button the user clicks to proceed
+     * @param eventsToBeUsed the list of events for validation
+     */
     public void addSubmitLogicTo(JButton submitButton, Event[] eventsToBeUsed) {
         submitButton.addActionListener(e -> {
             // Ensure that selectedHeadlines has exactly 4 non-empty, non-null entries
@@ -255,7 +301,7 @@ public class HeadlineChooser extends JPanel {
             }
 
             for (int i = 0; i < 4; i++) {
-                if (selectedHeadlines.get(i) == null || selectedHeadlines.get(i).isEmpty()) {
+                if (selectedHeadlines.get(i) == null || selectedHeadlines.get(i).content.isEmpty()) {
                     JOptionPane.showMessageDialog(this,
                         "Please select one headline for each of the 4 events.",
                         "Incomplete Selection", JOptionPane.WARNING_MESSAGE);
@@ -278,6 +324,11 @@ public class HeadlineChooser extends JPanel {
         });
     }
 
+    /**
+     * Draws the background image behind the panel contents.
+     *
+     * @param g the Graphics context used for drawing
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

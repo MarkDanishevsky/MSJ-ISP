@@ -1,3 +1,4 @@
-Monday June 9th, 2025
+To start playing the game, compile the Main.java file, and run it from that directory (\MSJ-ISP).
+If an error occurs, the most likely cause is that not all the files are compiled.
 
-To start playing the game, run the Main.java file.
+We hope you enjoy our game!
